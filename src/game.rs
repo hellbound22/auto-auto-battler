@@ -15,7 +15,7 @@ pub struct Game {
 
 impl Game {
     pub fn new(pack: &str) -> Self {
-        let mut file = File::open(format!("./{}.pets", pack)).unwrap();
+        let mut file = File::open(format!("./packs/{}.pets", pack)).unwrap();
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
         
