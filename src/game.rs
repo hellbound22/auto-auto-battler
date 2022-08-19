@@ -20,7 +20,7 @@ impl Game {
         file.read_to_string(&mut contents).unwrap();
         
     
-        let mut split = contents.split("\n");
+        let split = contents.split("\n");
         let lines = split.collect::<Vec<&str>>();
     
         let mut bucket: Vec<Pet> = Vec::new();
@@ -43,7 +43,7 @@ impl Game {
             return
         }
 
-        let mut b = BPet{
+        let b = BPet{
             pet: self.store.remove_pet(slot),
             xp: 0,
             level: 1,

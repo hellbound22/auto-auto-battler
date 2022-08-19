@@ -21,7 +21,7 @@ impl Crew {
     }
 
     pub fn add_pet(&mut self, pet: BPet, slot: u8) {
-        let mut curr_pet = &mut self.team[slot as usize];
+        let curr_pet = &mut self.team[slot as usize];
         if curr_pet.pet.id == 0 {
             *curr_pet = pet;
         }

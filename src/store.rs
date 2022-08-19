@@ -1,6 +1,5 @@
 use std::fmt;
 
-use rand::prelude::*;
 use rand::seq::SliceRandom; 
 
 use crate::pet::{Pet};
@@ -24,7 +23,7 @@ impl Store {
 
     fn _internal_roll(bucket: Vec<Pet>, slots: u8) -> Vec<Pet>{
         let mut new_pets: Vec<Pet> = Vec::new();
-        for x in 0..slots {
+        for _x in 0..slots {
             new_pets.push(bucket
                 .choose(&mut rand::thread_rng())
                 .cloned()

@@ -27,7 +27,7 @@ pub struct Pet {
 
 impl Pet {
     pub fn new(line: &str) -> Self {
-        let mut split = line.split(",");
+        let split = line.split(",");
         let vec = split.collect::<Vec<&str>>();
         Pet { id: vec[0].parse().unwrap(), tier: vec[1].parse().unwrap(), name: vec[2].to_string(), power: vec[3].parse().unwrap(), health: vec[4].parse().unwrap() }
     }
