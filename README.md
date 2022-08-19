@@ -1,6 +1,6 @@
 # Auto Auto Battler
 
-Super Auto Pets simulation engine
+A Super Auto Pets simulation engine
 
 #### TODO
 - [ ] Implement packs

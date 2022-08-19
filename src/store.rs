@@ -32,6 +32,10 @@ impl Store {
         }
         new_pets
     }
+
+    pub fn remove_pet(&mut self, slot: u8) -> Pet {
+        self.pets.remove(slot.into())
+    } 
 }
 
 impl fmt::Display for Store {
