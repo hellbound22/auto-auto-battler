@@ -32,6 +32,12 @@ impl Game {
     }
 }
 
+impl fmt::Display for Game {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}\n\n{}", self.crew, self.store)
+    }
+}
+
 #[derive(Debug)]
 struct Store {
     pets: Vec<Pet> 
@@ -61,6 +67,19 @@ impl Store {
     }
 }
 
+impl fmt::Display for Store {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut pets = String::new();
+
+        for p in &self.pets {
+            //if p.pet.id != 0 {
+                pets.push_str(&format!("[{}] {} = {}/{}\n", p.tier, p.name, p.power, p.health))
+            //}
+        }
+        write!(f, "=====STORE=====\n{}", pets)
+    }
+}
+
 #[derive(Debug)]
 struct Crew {
     gold: u8,
@@ -82,7 +101,7 @@ impl fmt::Display for Crew {
 
         for p in &self.team {
             //if p.pet.id != 0 {
-                team.push_str(&format!("{}({}|{}) = {}/{}\n", p.pet.name, p.level, p.xp, p.pet.power, p.pet.health))
+                team.push_str(&format!("[{}] {} ({}|{}) = {}/{}\n", p.pet.tier, p.pet.name, p.level, p.xp, p.pet.power, p.pet.health))
             //}
         }
         write!(f, "Gold: {}\nLifes: {}\nWins: {}\nTurn:{}\n=====TEAM=====\n{}", 
@@ -140,6 +159,6 @@ impl Default for Pet {
 fn main() {
     let mut game = Game::new("std");
 
-    println!("{}", game.crew);
+    println!("{}", game);
     //dbg!(game.crew);
 }
