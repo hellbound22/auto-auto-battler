@@ -28,7 +28,7 @@ impl Game {
             bucket.push(Pet::new(line));
         }
 
-        Game { crew: Crew::new(), store: Store::new(bucket.clone()), pack: bucket }
+        Game { crew: Crew::new(), store: Store::new(bucket[1..].to_vec()), pack: bucket }
     }
 }
 
@@ -72,28 +72,46 @@ struct Crew {
 
 impl Crew {
     pub fn new() -> Self {
-        Crew { gold: 10, lifes: 10, wins: 0, turn: 0, team: Vec::new()}
+        Crew { gold: 10, lifes: 10, wins: 0, turn: 0, team: vec![BPet::default(); 5]}
     }
 }
 
 impl fmt::Display for Crew {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Gold: {}\nLifes: {}\nWins: {}, Turn:{}", self.gold, self.lifes, self.wins, self.turn)
+        let mut team = String::new();
+
+        for p in &self.team {
+            //if p.pet.id != 0 {
+                team.push_str(&format!("{}({}|{}) = {}/{}\n", p.pet.name, p.level, p.xp, p.pet.power, p.pet.health))
+            //}
+        }
+        write!(f, "Gold: {}\nLifes: {}\nWins: {}\nTurn:{}\n=====TEAM=====\n{}", 
+            self.gold, self.lifes, self.wins, self.turn, team)
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct BPet {
     pet: Pet,
-    tier: u8,
+    level: u8,
     xp: u8,
     // TODO: Implement food
 }
 
+impl Default for BPet {
+    fn default() -> Self {
+        Self {
+            pet: Pet::default(),
+            level: 1,
+            xp: 0,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 struct Pet {
-    id: u8,
-    tier: u8,
+    id: i8,
+    tier: i8,
     name: String,
     power: i8,
     health: i8,
@@ -103,13 +121,25 @@ impl Pet {
     pub fn new(line: &str) -> Self {
         let mut split = line.split(",");
         let vec = split.collect::<Vec<&str>>();
-
         Pet { id: vec[0].parse().unwrap(), tier: vec[1].parse().unwrap(), name: vec[2].to_string(), power: vec[3].parse().unwrap(), health: vec[4].parse().unwrap() }
+    }
+}
+
+impl Default for Pet {
+    fn default() -> Self {
+        Self {
+            id: 0,
+            tier: 0,
+            name: "Empty".to_owned(),
+            power: 0,
+            health: 0,
+        }
     }
 }
 
 fn main() {
     let mut game = Game::new("std");
 
-    dbg!(game.store);
+    println!("{}", game.crew);
+    //dbg!(game.crew);
 }
