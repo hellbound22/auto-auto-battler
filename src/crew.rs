@@ -46,6 +46,8 @@ impl Crew {
                     p.as_ref().unwrap().pet.power,
                     p.as_ref().unwrap().pet.health
                 ))
+            } else {
+                team.push_str("None\n");
             }
         }
         team

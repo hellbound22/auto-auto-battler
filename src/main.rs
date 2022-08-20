@@ -15,7 +15,7 @@ fn main() {
     bot.bot_random();
     
     print!("{}", game);
-    game.swap_pet(0, 2);
+    game.swap_pet(0, 4);
     print!("{}", game);
 
     /*
