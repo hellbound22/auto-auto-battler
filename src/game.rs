@@ -5,6 +5,7 @@ use std::io::prelude::*;
 use crate::crew::Crew;
 use crate::pet::{BPet, Pet};
 use crate::store::Store;
+use crate::battle::*;
 
 #[derive(Debug)]
 pub struct Game {
@@ -57,7 +58,7 @@ impl Game {
         self.crew.pay_for_pet(3);
     }
 
-    pub fn battle(&mut self, mut enemy_crew: Crew) {
+    pub fn battle(&mut self, mut enemy_crew: Crew) -> u8 {
         let mut my_crew = self.crew.clone();
 
         let mut my_index = 0;
@@ -71,37 +72,9 @@ impl Game {
             let _b1 = std::io::stdin().read_line(&mut line).unwrap();
             
             // check for win condition
-            let mut my_alive = 0;
-            let mut enemy_alive = 0;
-            for pet in &my_crew.team {
-                if pet.is_none() {
-                    continue;
-                }
-                if pet.as_ref().unwrap().pet.health > 0 {
-                    my_alive += 1;
-                }
-            }
-
-            for pet in &enemy_crew.team {
-                if pet.is_none() {
-                    continue;
-                }
-                if pet.as_ref().unwrap().pet.health > 0 {
-                    enemy_alive += 1;
-                }
-            }
-
-            if my_alive == 0 && enemy_alive == 0 {
-                println!("EMPATE!!!!!!!!!!!!!");
-                break;
-            } else if my_alive > 0 && enemy_alive == 0 {
-                println!("VOCÊ GANHOU!!!!!!!!!!!!!");
-                break;
-            } else if my_alive == 0 && enemy_alive > 0  {
-                println!("VOCÊ PERDEU!!!!!!!!!!!!!");
-                break;
-            } else {
-                //println!("TURN");
+            match check_win_condition(&my_crew, &enemy_crew) {
+                3 => {},
+                x => {return x},
             }
             
             let my_attacker = &mut my_crew.team[my_index];
@@ -117,27 +90,17 @@ impl Game {
                 continue;
             }
 
-            //println!("{} - ({}/{})", my_attacker.as_ref().unwrap().pet.name, my_attacker.as_ref().unwrap().pet.power, my_attacker.as_ref().unwrap().pet.health);
-            //println!("{} - ({}/{})", enemy_attacker.as_ref().unwrap().pet.name, enemy_attacker.as_ref().unwrap().pet.power, enemy_attacker.as_ref().unwrap().pet.health);
+            headon_attack(my_attacker, enemy_attacker);
+            headon_attack(enemy_attacker, my_attacker);
 
-            my_attacker.as_mut().unwrap().pet.health = my_attacker.as_ref().unwrap().pet.health
-                - enemy_attacker.as_ref().unwrap().pet.power;
-            enemy_attacker.as_mut().unwrap().pet.health =
-                enemy_attacker.as_ref().unwrap().pet.health
-                    - my_attacker.as_ref().unwrap().pet.power;
-
-            if my_attacker.as_ref().unwrap().pet.health <= 0 {
-                *my_attacker = None;
+            if check_life(my_attacker) {
                 my_index += 1;
             }
-            if enemy_attacker.as_ref().unwrap().pet.health <= 0 {
-                *enemy_attacker = None;
+            if check_life(enemy_attacker) {
                 enemy_index += 1;
             }
             //break;
         }
-        println!("MY: \n{}", my_crew);
-        println!("\n\nENEMY: \n{}", enemy_crew);
     }
 }
 
