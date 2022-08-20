@@ -4,10 +4,10 @@ use crate::pet::BPet;
 
 #[derive(Clone, Debug)]
 pub struct Crew {
-    gold: u8,
-    lifes: u8,
-    wins: u8,
-    turn: u8,
+    pub gold: u8,
+    pub lifes: u8,
+    pub wins: u8,
+    pub turn: u8,
     pub team: Vec<Option<BPet>>,
 }
 
@@ -15,15 +15,15 @@ impl Crew {
     pub fn new() -> Self {
         Crew {
             gold: 10,
-            lifes: 10,
+            lifes: 4,
             wins: 0,
             turn: 0,
             team: vec![None; 5],
         }
     }
 
-    pub fn pay_for_shop_roll(&mut self) {
-        self.gold -= 1;
+    pub fn pay_for_shop_roll(&mut self, price: u8) {
+        self.gold -= price;
     }
 
     pub fn pay_for_pet(&mut self, price: u8) {

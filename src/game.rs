@@ -73,7 +73,7 @@ impl Game {
             
             match check_win_condition(&my_crew, &enemy_crew) {
                 3 => {},
-                x => {return x},
+                x => { return x },
             }
             
             let my_attacker = &mut my_crew.team[my_index];
@@ -100,15 +100,38 @@ impl Game {
             }
             //break;
         }
+
+        
     }
 
     pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
         self.crew._reorder(pet_one, pet_two);
     }
 
-    pub fn roll_shop(&mut self) {
+    pub fn roll_shop(&mut self, price: u8) {
         self.store._roll(self._pack.clone(), 3); // TODO: dynamic slots
-        self.crew.pay_for_shop_roll();
+        self.crew.pay_for_shop_roll(price);
+    }
+
+    pub fn game_loop(&mut self, bot: Crew) { // bot prob has to be reference
+        match self.battle(bot) {
+            0 => { println!("DRAW!!!!") },
+            1 => { 
+                self.crew.wins += 1;
+                println!("WIN!!!!") 
+            },
+            2 => {
+                self.crew.lifes -= 1;
+                println!("LOST!!!!") 
+            },
+            _ => { println!("ERROR") }
+        }
+    
+        self.crew.gold = 10;
+        self.crew.turn += 1;
+        self.roll_shop(0);
+
+        //TODO: manage
     }
 }
 

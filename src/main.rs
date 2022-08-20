@@ -15,17 +15,15 @@ fn main() {
     bot.bot_random();
     
     println!("{}", game);
-    game.roll_shop();
+    game.roll_shop(1);
     println!("{}", game);
 
     //game.swap_pet(0, 4);
     /* 
-    println!("======================BATTLE====================");
-    match game.battle(bot.crew.clone()) {
-        0 => { println!("DRAW!!!!") },
-        1 => { println!("WIN!!!!") },
-        2 => { println!("LOST!!!!") },
-        _ => { println!("ERROR") }
-    }
     */
+    println!("======================BATTLE====================");
+    game.game_loop(bot.crew.clone());
+
+    println!("{}", game);
+    
 }

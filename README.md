@@ -10,6 +10,7 @@ A Super Auto Pets simulation engine
 - [x] Battle phase
 - [ ] Managment phase
   - [x] ORDER
+  - [ ] Freezing
 - [ ] Foods
 - [ ] Abilities
 
