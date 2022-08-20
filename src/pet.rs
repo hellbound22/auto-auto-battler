@@ -3,6 +3,7 @@ pub struct BPet {
     pub pet: Pet,
     pub level: u8,
     pub xp: u8,
+    pub alive: bool
     // TODO: Implement food
 }
 
@@ -12,6 +13,7 @@ impl Default for BPet {
             pet: Pet::default(),
             level: 1,
             xp: 0,
+            alive: false,
         }
     }
 }

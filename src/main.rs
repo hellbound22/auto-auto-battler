@@ -12,6 +12,8 @@ fn main() {
 
     //println!("{}", game);
     game.buy_pet(0, 0);
+    game.buy_pet(0, 1);
+    game.buy_pet(0, 2);
     bot.bot_random();
     //println!("\n\n==============BOT===============\n{}", bot);
     

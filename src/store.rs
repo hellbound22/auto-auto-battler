@@ -17,7 +17,7 @@ impl Store {
         }
     }
 
-    pub fn roll(&mut self, bucket: Vec<Pet>, slots: u8) {
+    pub fn _roll(&mut self, bucket: Vec<Pet>, slots: u8) {
         self.pets = Store::_internal_roll(bucket, slots);
     }
 
