@@ -11,9 +11,7 @@ fn main() {
     let mut game = Game::new("std");
     let mut bot = Game::new("std");
 
-    game.buy_pet(0, 0);
-    game.buy_pet(0, 1);
-    game.buy_pet(0, 2);
+    game.bot_random();
     bot.bot_random();
     
     println!("======================BATTLE====================");

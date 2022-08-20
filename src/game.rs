@@ -31,7 +31,7 @@ impl Game {
 
         Game {
             crew: Crew::new(),
-            store: Store::new(bucket[1..].to_vec()),
+            store: Store::new(bucket.clone()),
             _pack: bucket,
         }
     }
@@ -68,10 +68,9 @@ impl Game {
             println!("MY:\n{}", my_crew.d_team());
             println!("ENEMY:\n{}", enemy_crew.d_team());
 
-            let mut line = String::new();
-            let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+            //let mut line = String::new();
+            //let _b1 = std::io::stdin().read_line(&mut line).unwrap();
             
-            // check for win condition
             match check_win_condition(&my_crew, &enemy_crew) {
                 3 => {},
                 x => {return x},
