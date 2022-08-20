@@ -13,19 +13,22 @@ pub struct Store {
 impl Store {
     pub fn new(bucket: Vec<Pet>) -> Self {
         Store {
-            pets: Store::_internal_roll(bucket, 3)
+            pets: Store::_internal_roll(bucket, 3, 1.)
         }
     }
 
-    pub fn _roll(&mut self, bucket: Vec<Pet>, slots: u8) {
-        self.pets = Store::_internal_roll(bucket, slots);
+    pub fn _roll(&mut self, bucket: Vec<Pet>, slots: u8, tier: f32) {
+        self.pets = Store::_internal_roll(bucket, slots, tier);
     }
 
-    fn _internal_roll(bucket: Vec<Pet>, slots: u8) -> Vec<Pet>{
+    fn _internal_roll(bucket: Vec<Pet>, slots: u8, tier: f32) -> Vec<Pet>{
+        let tier_bucket: Vec<&Pet> = bucket.iter().filter(|x| x.tier <= tier as i8).collect();
+
         let mut new_pets: Vec<Pet> = Vec::new();
         for _x in 0..slots {
-            new_pets.push(bucket
+            new_pets.push(tier_bucket
                 .choose(&mut rand::thread_rng())
+                .cloned()
                 .cloned()
                 .unwrap());
         }

@@ -109,7 +109,8 @@ impl Game {
     }
 
     pub fn roll_shop(&mut self, price: u8) {
-        self.store._roll(self._pack.clone(), 3); // TODO: dynamic slots
+        let tier = (self.crew.turn as f32 / 2.).ceil();
+        self.store._roll(self._pack.clone(), 3, tier); // TODO: dynamic slots
         self.crew.pay_for_shop_roll(price);
     }
 

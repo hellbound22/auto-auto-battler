@@ -17,7 +17,7 @@ impl Crew {
             gold: 10,
             lifes: 4,
             wins: 0,
-            turn: 0,
+            turn: 1,
             team: vec![None; 5],
         }
     }

@@ -14,6 +14,7 @@ A Super Auto Pets simulation engine
   - [x] Upgrade pets
 - [ ] Foods
 - [ ] Abilities
+- [x] Upgrade shop with turns passed
 
 #### Notes
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
