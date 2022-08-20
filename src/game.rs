@@ -127,9 +127,11 @@ impl Game {
                     - my_attacker.as_ref().unwrap().pet.power;
 
             if my_attacker.as_ref().unwrap().pet.health <= 0 {
+                *my_attacker = None;
                 my_index += 1;
             }
             if enemy_attacker.as_ref().unwrap().pet.health <= 0 {
+                *enemy_attacker = None;
                 enemy_index += 1;
             }
             //break;
