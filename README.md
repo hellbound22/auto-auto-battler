@@ -9,6 +9,7 @@ A Super Auto Pets simulation engine
     - [ ] DLC 2
 - [x] Battle phase
 - [ ] Managment phase
+  - [ ] ORDER
 - [ ] Foods
 - [ ] Abilities
 

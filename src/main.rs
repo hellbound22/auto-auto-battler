@@ -14,6 +14,11 @@ fn main() {
     game.bot_random();
     bot.bot_random();
     
+    print!("{}", game);
+    game.swap_pet(0, 2);
+    print!("{}", game);
+
+    /*
     println!("======================BATTLE====================");
     match game.battle(bot.crew.clone()) {
         0 => { println!("DRAW!!!!") },
@@ -21,5 +26,5 @@ fn main() {
         2 => { println!("LOST!!!!") },
         _ => { println!("ERROR") }
     }
-
+    */
 }

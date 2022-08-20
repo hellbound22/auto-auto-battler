@@ -101,6 +101,10 @@ impl Game {
             //break;
         }
     }
+
+    pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
+        self.crew._reorder(pet_one, pet_two);
+    }
 }
 
 impl fmt::Display for Game {

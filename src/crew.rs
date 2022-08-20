@@ -50,6 +50,12 @@ impl Crew {
         }
         team
     }
+
+    pub fn _reorder(&mut self, pet_one: usize, pet_two: usize) {
+        let swap_aux = self.team[pet_one].clone();
+        self.team[pet_one] = self.team[pet_two].to_owned();
+        self.team[pet_two] = swap_aux;
+    }
 }
 
 impl fmt::Display for Crew {
