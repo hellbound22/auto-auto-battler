@@ -105,6 +105,11 @@ impl Game {
     pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
         self.crew._reorder(pet_one, pet_two);
     }
+
+    pub fn roll_shop(&mut self) {
+        self.store._roll(self._pack.clone(), 3); // TODO: dynamic slots
+        self.crew.pay_for_shop_roll();
+    }
 }
 
 impl fmt::Display for Game {

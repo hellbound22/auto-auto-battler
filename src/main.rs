@@ -14,11 +14,12 @@ fn main() {
     game.bot_random();
     bot.bot_random();
     
-    print!("{}", game);
-    game.swap_pet(0, 4);
-    print!("{}", game);
+    println!("{}", game);
+    game.roll_shop();
+    println!("{}", game);
 
-    /*
+    //game.swap_pet(0, 4);
+    /* 
     println!("======================BATTLE====================");
     match game.battle(bot.crew.clone()) {
         0 => { println!("DRAW!!!!") },

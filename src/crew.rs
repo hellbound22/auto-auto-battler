@@ -22,6 +22,10 @@ impl Crew {
         }
     }
 
+    pub fn pay_for_shop_roll(&mut self) {
+        self.gold -= 1;
+    }
+
     pub fn pay_for_pet(&mut self, price: u8) {
         self.gold = self.gold - price;
     }
