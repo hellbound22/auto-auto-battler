@@ -114,24 +114,63 @@ impl Game {
     }
 
     pub fn game_loop(&mut self, bot: Crew) { // bot prob has to be reference
-        match self.battle(bot) {
-            0 => { println!("DRAW!!!!") },
-            1 => { 
-                self.crew.wins += 1;
-                println!("WIN!!!!") 
-            },
-            2 => {
-                self.crew.lifes -= 1;
-                println!("LOST!!!!") 
-            },
-            _ => { println!("ERROR") }
-        }
-    
-        self.crew.gold = 10;
-        self.crew.turn += 1;
-        self.roll_shop(0);
+        loop {
+            // TODO: control usage of this block with a arg
+            loop {
+                println!("{}", self);
+                let mut line = String::new();
+                let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                let x: u8 = line.trim().parse().unwrap();
 
-        //TODO: manage
+                match x {
+                    // buy mode
+                    1 => {
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let shop_pet: u8 = line.trim().parse().unwrap();
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let team_slot: u8 = line.trim().parse().unwrap();
+                        self.buy_pet(shop_pet, team_slot);
+                    },
+                    // swap mode
+                    2 => {
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let pet_one: u8 = line.trim().parse().unwrap();
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let pet_two: u8 = line.trim().parse().unwrap();
+                        self.swap_pet(pet_one as usize, pet_two as usize);
+                    },
+                    3 => {
+                        self.roll_shop(1);
+                    }
+                    // end turn mode
+                    99 => {break},
+                    _ => {}
+                }
+            }
+
+            match self.battle(bot.clone()) { //Note: we dont need to clone here, just for debuging
+                0 => { println!("DRAW!!!!") },
+                1 => { 
+                    self.crew.wins += 1;
+                    println!("WIN!!!!") 
+                },
+                2 => {
+                    self.crew.lifes -= 1;
+                    println!("LOST!!!!") 
+                },
+                _ => { println!("ERROR") }
+            }
+        
+            self.crew.gold = 10;
+            self.crew.turn += 1;
+            self.roll_shop(0);
+
+            
+        }
     }
 }
 

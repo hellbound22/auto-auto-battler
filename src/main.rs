@@ -14,16 +14,18 @@ fn main() {
     game.bot_random();
     bot.bot_random();
     
-    println!("{}", game);
-    game.roll_shop(1);
-    println!("{}", game);
+    // println!("{}", game);
+    // game.roll_shop(1);
+    // println!("{}", game);
 
     //game.swap_pet(0, 4);
     /* 
-    */
-    println!("======================BATTLE====================");
-    game.game_loop(bot.crew.clone());
-
-    println!("{}", game);
     
+    println!("======================BATTLE====================");
+    
+
+    
+    */
+    //println!("{}", game);
+    game.game_loop(bot.crew.clone());
 }

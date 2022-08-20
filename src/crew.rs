@@ -30,10 +30,29 @@ impl Crew {
         self.gold = self.gold - price;
     }
 
-    pub fn add_pet(&mut self, pet: BPet, slot: u8) {
+    pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<(), ()> {
         let curr_pet = &mut self.team[slot as usize];
-        if curr_pet.is_none() {
-            *curr_pet = Some(pet);
+        match curr_pet {
+            Some(x) => {
+                if x.pet.id == pet.pet.id {
+                    let curr_pet = curr_pet.as_mut().unwrap();
+                    curr_pet.xp += 1;
+                    if curr_pet.xp == 2 && curr_pet.level == 1 {
+                        curr_pet.xp = 0;
+                        curr_pet.level = 2;
+                        Ok(())
+                    } else if curr_pet.xp == 3 && curr_pet.level == 2 {
+                        curr_pet.xp = 0;
+                        curr_pet.level = 3;
+                        Ok(())
+                    } else {
+                        Err(())
+                    }
+                } else {
+                    Err(())
+                }
+            },
+            None => { *curr_pet = Some(pet); Ok(()) }
         }
     }
 

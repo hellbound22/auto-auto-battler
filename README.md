@@ -11,6 +11,7 @@ A Super Auto Pets simulation engine
 - [ ] Managment phase
   - [x] ORDER
   - [ ] Freezing
+  - [x] Upgrade pets
 - [ ] Foods
 - [ ] Abilities
 
