@@ -5,7 +5,8 @@ use std::io::prelude::*;
 use crate::crew::Crew;
 use crate::pet::{BPet, Pet};
 use crate::store::Store;
-use crate::battle::*;
+use crate::{battle::*, util};
+use crate::util::*;
 
 #[derive(Debug)]
 pub struct Game {
@@ -119,29 +120,24 @@ impl Game {
             // TODO: control usage of this block with a arg
             loop {
                 println!("{}", self);
-                let mut line = String::new();
-                let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                let x: u8 = line.trim().parse().unwrap();
+                println!("=====Options=====\n(1) Buy mode\n(2) Swap mode\n(3) Roll shop\n(4) Sell pet\n(5) Freeze/unfreeze shop pet\n(99) End turn\n");
+                let x = util::wait_for_input();
 
                 match x {
                     // buy mode
                     1 => {
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let shop_pet: u8 = line.trim().parse().unwrap();
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let team_slot: u8 = line.trim().parse().unwrap();
+                        println!("What shop pet do you want?");
+                        let shop_pet: u8 = util::wait_for_input() - 1;
+                        println!("What team slot do you want to put that pet?");
+                        let team_slot: u8 = util::wait_for_input() - 1;
                         self.buy_pet(shop_pet, team_slot);
                     },
                     // swap mode
                     2 => {
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let pet_one: u8 = line.trim().parse().unwrap();
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let pet_two: u8 = line.trim().parse().unwrap();
+                        println!("Insert position of pet one");
+                        let pet_one: u8 = util::wait_for_input() - 1;
+                        println!("Insert position of pet two");
+                        let pet_two: u8 = util::wait_for_input() - 1;
                         self.swap_pet(pet_one as usize, pet_two as usize);
                     },
                     // Roll shop
@@ -150,16 +146,15 @@ impl Game {
                     },
                     // Sell pet
                     4 => {
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let pet: usize = line.trim().parse().unwrap();
-                        self.crew.sell_pet(pet);
+                        println!("What pet do you want to sell?");
+                        let pet = util::wait_for_input() - 1;
+                        self.crew.sell_pet(pet as usize);
                     },
+                    // Freeze pet
                     5 => {
-                        let mut line = String::new();
-                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-                        let pet: usize = line.trim().parse().unwrap();
-                        self.store.freeze_and_unfreeze_pet(pet);
+                        println!("What pet do you want to freeze/unfreeze?");
+                        let pet = util::wait_for_input() - 1;
+                        self.store.freeze_and_unfreeze_pet(pet as usize);
                     }
                     // end turn mode
                     99 => {break},

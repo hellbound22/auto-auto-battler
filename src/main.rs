@@ -3,6 +3,7 @@ mod pet;
 mod crew;
 mod game;
 mod battle;
+mod util;
 
 use game::Game;
 
