@@ -6,7 +6,6 @@ use crate::crew::Crew;
 use crate::pet::{BPet, Pet};
 use crate::store::Store;
 use crate::{battle::*, util};
-use crate::util::*;
 
 #[derive(Debug)]
 pub struct Game {
@@ -54,7 +53,20 @@ impl Game {
             level: 1,
         };
         // TODO: handle this
-        self.crew.add_pet(b, team_slot);
+        match self.crew.add_pet(b, team_slot) {
+            Ok(0) => {},
+            Ok(1) => { 
+                let mut tier = (self.crew.turn as f32 / 2.).ceil();
+                if tier < 6. {
+                    tier += 1.; 
+                }
+
+                dbg!(tier);
+                self.store.tier_up_pet(self._pack.clone(), tier);
+            },
+            Ok(_) => {},
+            Err(_) => {},
+        }
 
         self.crew.pay_for_pet(3);
     }
@@ -175,7 +187,7 @@ impl Game {
                 _ => { println!("ERROR") }
             }
         
-            self.crew.gold = 10;
+            self.crew.gold = 100;
             self.crew.turn += 1;
             self.roll_shop(0);
 

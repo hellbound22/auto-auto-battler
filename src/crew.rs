@@ -39,7 +39,7 @@ impl Crew {
         }
     }
 
-    pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<(), ()> {
+    pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<u8, ()> {
         let curr_pet = &mut self.team[slot as usize];
         match curr_pet {
             Some(x) => {
@@ -49,11 +49,11 @@ impl Crew {
                     if curr_pet.xp == 2 && curr_pet.level == 1 {
                         curr_pet.xp = 0;
                         curr_pet.level = 2;
-                        Ok(())
+                        Ok(1) // mark: when level up
                     } else if curr_pet.xp == 3 && curr_pet.level == 2 {
                         curr_pet.xp = 0;
                         curr_pet.level = 3;
-                        Ok(())
+                        Ok(1) // mark: when level up
                     } else {
                         Err(())
                     }
@@ -61,7 +61,7 @@ impl Crew {
                     Err(())
                 }
             },
-            None => { *curr_pet = Some(pet); Ok(()) }
+            None => { *curr_pet = Some(pet); Ok(0) }
         }
     }
 

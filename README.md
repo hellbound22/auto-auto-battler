@@ -16,7 +16,7 @@ A Super Auto Pets simulation engine
 - [ ] Foods
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
-- [ ] Sell tier upgraded pet when friend levels up
+- [x] Sell tier upgraded pet when friend levels up
 
 #### Notes
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
