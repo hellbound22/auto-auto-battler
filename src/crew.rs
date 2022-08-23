@@ -30,6 +30,15 @@ impl Crew {
         self.gold = self.gold - price;
     }
 
+    pub fn sell_pet(&mut self, pet: usize) {
+        let pet = &mut self.team[pet];
+
+        if pet.is_some() {
+            self.gold += pet.as_mut().unwrap().level;
+            *pet = None;
+        }
+    }
+
     pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<(), ()> {
         let curr_pet = &mut self.team[slot as usize];
         match curr_pet {

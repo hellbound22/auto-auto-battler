@@ -65,8 +65,8 @@ impl Game {
         let mut enemy_index = 0;
 
         loop {
-            println!("MY:\n{}", my_crew.d_team());
-            println!("ENEMY:\n{}", enemy_crew.d_team());
+            //println!("MY:\n{}", my_crew.d_team());
+            //println!("ENEMY:\n{}", enemy_crew.d_team());
 
             //let mut line = String::new();
             //let _b1 = std::io::stdin().read_line(&mut line).unwrap();
@@ -144,9 +144,17 @@ impl Game {
                         let pet_two: u8 = line.trim().parse().unwrap();
                         self.swap_pet(pet_one as usize, pet_two as usize);
                     },
+                    // Roll shop
                     3 => {
                         self.roll_shop(1);
-                    }
+                    },
+                    // Sell pet
+                    4 => {
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let pet: usize = line.trim().parse().unwrap();
+                        self.crew.sell_pet(pet);
+                    },
                     // end turn mode
                     99 => {break},
                     _ => {}

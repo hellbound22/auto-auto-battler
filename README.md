@@ -12,6 +12,7 @@ A Super Auto Pets simulation engine
   - [x] ORDER
   - [ ] Freezing
   - [x] Upgrade pets
+  - [x] Sell pets
 - [ ] Foods
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
