@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 use crate::crew::Crew;
+use crate::food::Food;
 use crate::pet::{BPet, Pet};
 use crate::store::Store;
 use crate::{battle::*, util};
@@ -11,7 +12,6 @@ use crate::{battle::*, util};
 pub struct Game {
     pub crew: Crew,
     store: Store,
-    _pack: Vec<Pet>,
 }
 
 impl Game {
@@ -23,16 +23,22 @@ impl Game {
         let split = contents.split("\n");
         let lines = split.collect::<Vec<&str>>();
 
-        let mut bucket: Vec<Pet> = Vec::new();
+        let pet_lines = lines.iter().filter(|x| x.chars().last() == Some('p'));
+        let food_lines = lines.iter().filter(|x| x.chars().last() == Some('f'));
 
-        for line in lines {
-            bucket.push(Pet::new(line));
+        let mut pet_bucket: Vec<Pet> = Vec::new();
+        for line in pet_lines {
+            pet_bucket.push(Pet::new(line));
+        }
+
+        let mut food_bucket: Vec<Food> = Vec::new();
+        for line in food_lines {
+            food_bucket.push(Food::new(line));
         }
 
         Game {
             crew: Crew::new(),
-            store: Store::new(bucket.clone()),
-            _pack: bucket,
+            store: Store::new(pet_bucket.clone(), food_bucket.clone()),
         }
     }
 
@@ -51,24 +57,40 @@ impl Game {
             pet: self.store.remove_pet(slot),
             xp: 0,
             level: 1,
+            food: None, // WARN: Some pets come with foods
         };
-        // TODO: handle this
+
         match self.crew.add_pet(b, team_slot) {
-            Ok(0) => {},
-            Ok(1) => { 
+            Ok(0) => {}
+            Ok(1) => {
                 let mut tier = (self.crew.turn as f32 / 2.).ceil();
                 if tier < 6. {
-                    tier += 1.; 
+                    tier += 1.;
                 }
 
                 dbg!(tier);
-                self.store.tier_up_pet(self._pack.clone(), tier);
-            },
-            Ok(_) => {},
-            Err(_) => {},
+                self.store.tier_up_pet(tier);
+            }
+            Ok(_) => {}
+            Err(_) => {}
         }
 
-        self.crew.pay_for_pet(3);
+        self.crew.pay(3);
+    }
+
+    pub fn buy_food(&mut self, shop_slot: u8, pet_slot: u8) {
+        // WARN some foods have team and store wide effects
+        let food = self.store.remove_food(shop_slot);
+
+        match food.type_effect {
+            0 => {
+                let pet = self.crew.team[pet_slot as usize].as_mut();
+                pet.unwrap().switch_food(food);
+                self.crew.pay(3);
+            }
+            _ => {}
+        }
+        
     }
 
     pub fn battle(&mut self, mut enemy_crew: Crew) -> u8 {
@@ -83,12 +105,12 @@ impl Game {
 
             //let mut line = String::new();
             //let _b1 = std::io::stdin().read_line(&mut line).unwrap();
-            
+
             match check_win_condition(&my_crew, &enemy_crew) {
-                3 => {},
-                x => { return x },
+                3 => {}
+                x => return x,
             }
-            
+
             let my_attacker = &mut my_crew.team[my_index];
             let enemy_attacker = &mut enemy_crew.team[enemy_index];
 
@@ -113,8 +135,6 @@ impl Game {
             }
             //break;
         }
-
-        
     }
 
     pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
@@ -123,16 +143,17 @@ impl Game {
 
     pub fn roll_shop(&mut self, price: u8) {
         let tier = (self.crew.turn as f32 / 2.).ceil();
-        self.store._roll(self._pack.clone(), 3, tier); // TODO: dynamic slots
-        self.crew.pay_for_shop_roll(price);
+        self.store.roll(3, 1, tier); // TODO: dynamic slots
+        self.crew.pay(price);
     }
 
-    pub fn game_loop(&mut self, bot: Crew) { // bot prob has to be reference
+    pub fn game_loop(&mut self, bot: Crew) {
+        // bot prob has to be reference
         loop {
             // TODO: control usage of this block with a arg
             loop {
                 println!("{}", self);
-                println!("=====Options=====\n(1) Buy mode\n(2) Swap mode\n(3) Roll shop\n(4) Sell pet\n(5) Freeze/unfreeze shop pet\n(99) End turn\n");
+                println!("=====Options=====\n(1) Buy mode\n(2) Swap mode\n(3) Roll shop\n(4) Sell pet\n(5) Freeze/unfreeze pet\n(6) Buy food\n(7) Freeze/unfreeze food\n(99) End turn\n");
                 let x = util::wait_for_input();
 
                 match x {
@@ -143,7 +164,7 @@ impl Game {
                         println!("What team slot do you want to put that pet?");
                         let team_slot: u8 = util::wait_for_input() - 1;
                         self.buy_pet(shop_pet, team_slot);
-                    },
+                    }
                     // swap mode
                     2 => {
                         println!("Insert position of pet one");
@@ -151,47 +172,65 @@ impl Game {
                         println!("Insert position of pet two");
                         let pet_two: u8 = util::wait_for_input() - 1;
                         self.swap_pet(pet_one as usize, pet_two as usize);
-                    },
+                    }
                     // Roll shop
                     3 => {
                         self.roll_shop(1);
-                    },
+                    }
                     // Sell pet
                     4 => {
                         println!("What pet do you want to sell?");
                         let pet = util::wait_for_input() - 1;
                         self.crew.sell_pet(pet as usize);
-                    },
+                    }
                     // Freeze pet
                     5 => {
                         println!("What pet do you want to freeze/unfreeze?");
                         let pet = util::wait_for_input() - 1;
                         self.store.freeze_and_unfreeze_pet(pet as usize);
                     }
+                    // buy food
+                    6 => {
+                        println!("What food do you want?");
+                        let shop_pet: u8 = util::wait_for_input() - 1;
+                        println!("What team slot do you want to put that food?");
+                        let team_slot: u8 = util::wait_for_input() - 1;
+                        self.buy_food(shop_pet, team_slot);
+                    }
+                    // freeze food
+                    7 => {
+                        println!("What food do you want to freeze/unfreeze?");
+                        let food = util::wait_for_input() - 1;
+                        self.store.freeze_and_unfreeze_food(food as usize);
+                    }
                     // end turn mode
-                    99 => {break},
+                    99 => break,
                     _ => {}
                 }
             }
 
-            match self.battle(bot.clone()) { //Note: we dont need to clone here, just for debuging
-                0 => { println!("DRAW!!!!") },
-                1 => { 
+            match self.battle(bot.clone()) {
+                //Note: we dont need to clone here, just for debuging
+                0 => {
+                    println!("DRAW!!!!")
+                }
+                1 => {
                     self.crew.wins += 1;
-                    println!("WIN!!!!") 
-                },
+                    println!("WIN!!!!")
+                }
                 2 => {
+                    // TODO: check if lives are 0
                     self.crew.lifes -= 1;
-                    println!("LOST!!!!") 
-                },
-                _ => { println!("ERROR") }
+                    println!("LOST!!!!")
+                }
+                _ => {
+                    println!("ERROR")
+                }
             }
-        
-            self.crew.gold = 100;
+
+            self.crew.gold = 10;
             self.crew.turn += 1;
             self.roll_shop(0);
-
-            
         }
     }
 }

@@ -4,6 +4,7 @@ mod crew;
 mod game;
 mod battle;
 mod util;
+mod food;
 
 use game::Game;
 

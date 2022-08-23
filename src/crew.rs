@@ -22,12 +22,9 @@ impl Crew {
         }
     }
 
-    pub fn pay_for_shop_roll(&mut self, price: u8) {
+    // TODO: error handle this
+    pub fn pay(&mut self, price: u8) {
         self.gold -= price;
-    }
-
-    pub fn pay_for_pet(&mut self, price: u8) {
-        self.gold = self.gold - price;
     }
 
     pub fn sell_pet(&mut self, pet: usize) {

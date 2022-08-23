@@ -1,3 +1,5 @@
+use crate::food::Food;
+
 #[derive(Clone, Debug)]
 pub struct SPet {
     pub pet: Pet,
@@ -18,7 +20,14 @@ pub struct BPet {
     pub pet: Pet,
     pub level: u8,
     pub xp: u8,
+    pub food: Option<Food>,
     // TODO: Implement food
+}
+
+impl BPet {
+    pub fn switch_food(&mut self, food: Food) {
+        self.food = Some(food);
+    }
 }
 
 impl Default for BPet {
@@ -27,6 +36,7 @@ impl Default for BPet {
             pet: Pet::default(),
             level: 1,
             xp: 0,
+            food: None,
         }
     }
 }

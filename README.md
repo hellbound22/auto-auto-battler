@@ -13,10 +13,11 @@ A Super Auto Pets simulation engine
   - [x] Freezing
   - [x] Upgrade pets
   - [x] Sell pets
-- [ ] Foods
+- [ ] Foods (partial)
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
 - [x] Sell tier upgraded pet when friend levels up
+- [ ] More slots as turns progress
 - [ ] AI!!!!!!!
 
 #### Notes
