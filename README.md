@@ -4,7 +4,7 @@ A Super Auto Pets simulation engine
 
 #### TODO
 - [ ] Implement packs
-    - [ ] Standard (partial)
+    - [x] Standard (partial, missing food)
     - [ ] DLC 1 
     - [ ] DLC 2
 - [x] Battle phase
@@ -17,6 +17,7 @@ A Super Auto Pets simulation engine
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
 - [x] Sell tier upgraded pet when friend levels up
+- [ ] AI!!!!!!!
 
 #### Notes
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
