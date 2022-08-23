@@ -1,9 +1,23 @@
 #[derive(Clone, Debug)]
+pub struct SPet {
+    pub pet: Pet,
+    pub frozen: bool,
+}
+
+impl From<&Pet> for SPet {
+    fn from(item: &Pet) -> Self {
+        Self {
+            pet: item.clone(),
+            frozen: false,
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
 pub struct BPet {
     pub pet: Pet,
     pub level: u8,
     pub xp: u8,
-    pub alive: bool
     // TODO: Implement food
 }
 
@@ -13,8 +27,13 @@ impl Default for BPet {
             pet: Pet::default(),
             level: 1,
             xp: 0,
-            alive: false,
         }
+    }
+}
+
+impl From<SPet> for Pet {
+    fn from(item: SPet) -> Self {
+        item.pet
     }
 }
 

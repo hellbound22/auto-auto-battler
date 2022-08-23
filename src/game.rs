@@ -51,8 +51,8 @@ impl Game {
             pet: self.store.remove_pet(slot),
             xp: 0,
             level: 1,
-            alive: true,
         };
+        // TODO: handle this
         self.crew.add_pet(b, team_slot);
 
         self.crew.pay_for_pet(3);
@@ -155,6 +155,12 @@ impl Game {
                         let pet: usize = line.trim().parse().unwrap();
                         self.crew.sell_pet(pet);
                     },
+                    5 => {
+                        let mut line = String::new();
+                        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+                        let pet: usize = line.trim().parse().unwrap();
+                        self.store.freeze_and_unfreeze_pet(pet);
+                    }
                     // end turn mode
                     99 => {break},
                     _ => {}

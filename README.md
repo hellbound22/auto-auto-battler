@@ -8,14 +8,15 @@ A Super Auto Pets simulation engine
     - [ ] DLC 1 
     - [ ] DLC 2
 - [x] Battle phase
-- [ ] Managment phase
+- [x] Managment phase
   - [x] ORDER
-  - [ ] Freezing
+  - [x] Freezing
   - [x] Upgrade pets
   - [x] Sell pets
 - [ ] Foods
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
+- [ ] Sell tier upgraded pet when friend levels up
 
 #### Notes
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
