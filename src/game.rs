@@ -43,6 +43,7 @@ impl Game {
     }
 
     pub fn bot_random(&mut self) {
+        self.roll_shop(0);
         for x in 0..3 {
             self.buy_pet(0, x);
         }
@@ -68,7 +69,6 @@ impl Game {
                     tier += 1.;
                 }
 
-                dbg!(tier);
                 self.store.tier_up_pet(tier);
             }
             Ok(_) => {}
@@ -111,6 +111,7 @@ impl Game {
                 x => return x,
             }
 
+            // TODO: change how the attacker is chosen
             let my_attacker = &mut my_crew.team[my_index];
             let enemy_attacker = &mut enemy_crew.team[enemy_index];
 
@@ -143,7 +144,7 @@ impl Game {
 
     pub fn roll_shop(&mut self, price: u8) {
         let tier = (self.crew.turn as f32 / 2.).ceil();
-        self.store.roll(3, 1, tier); // TODO: dynamic slots
+        self.store.roll(self.crew.turn, tier);
         self.crew.pay(price);
     }
 

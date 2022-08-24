@@ -1,6 +1,6 @@
 use crate::food::Food;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct SPet {
     pub pet: Pet,
     pub frozen: bool,
