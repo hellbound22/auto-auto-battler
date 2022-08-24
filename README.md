@@ -17,10 +17,10 @@ A Super Auto Pets simulation engine
 - [ ] Abilities
 - [x] Upgrade shop with turns passed
 - [x] Sell tier upgraded pet when friend levels up
-- [ ] More slots as turns progress
-  - [ ] Turn 3 +1 food slot
-  - [ ] Turn 5 +1 pet slot
-  - [ ] Turn 9 +1 pet slot   
+- [x] More slots as turns progress
+  - [x] Turn 3 +1 food slot
+  - [x] Turn 5 +1 pet slot
+  - [x] Turn 9 +1 pet slot   
 - [ ] Use current life implementation
 - [ ] AI!!!!!!!
 
