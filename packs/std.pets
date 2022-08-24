@@ -1,3 +1,4 @@
+0,0,None,0,0,p
 1,1,Ant,2,1,p
 2,1,Beaver,3,2,p
 3,1,Cricket,1,2,p
@@ -56,5 +57,3 @@
 56,6,Mammoth,3,10,p
 57,6,Snake,6,6,p
 58,6,Tiger,4,3,p
-59,1,Apple,0,f
-60,1,Honey,0,f
