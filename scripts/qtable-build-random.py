@@ -1,5 +1,4 @@
 import itertools
-import json
 
 class QCrew:
     def __init__(self, bucket, file_desc, size):
@@ -16,7 +15,7 @@ class QCrew:
         u_index = 0
 
         for gold in range(10): #WARN: More values of gold are possible
-            for shop_tier in range(6): #WARN: More values of gold are possible
+            for shop_tier in range(6): 
                 for x in crew:
                     for y in crew:
                         file_desc.write(str(gold))
@@ -26,6 +25,9 @@ class QCrew:
                         file_desc.write(QCrew.qtable_lst_str(x))
                         file_desc.write(";")
                         file_desc.write(QCrew.qtable_lst_str(y))
+                        file_desc.write(";")
+                        # Q index
+                        file_desc.write("0")
                         file_desc.write("\n")
 
                         print('Writing to file: ' + str(u_index) + " of " + str(l) + " - " + str(round((u_index/l)*100, 2)) + '%  \r', end="")
