@@ -39,3 +39,12 @@ n,n,n,n...
 lookup state -> lookup q-table(generated and updated by rust) -> lookup action
 
 loop this until money is zero
+
+new order (uses the same table for states; optimized?):
+lookup shop state -> lookup crew state -> lookup q-table(generated and updated by rust) -> lookup action
+
+#### File sizes
+state with 10 pets (g/st) = 1,7mb
+state with all pets (g/st) = 16,2gb (est)
+state with all pets (g) = 2,7gb (est)
+state with all pets = 274mb

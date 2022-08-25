@@ -9,7 +9,7 @@ if __name__ == "__main__":
     with open("./packs/std.pets", "r") as fp:
         lines = fp.readlines()
 
-        for l in lines[slice(10)]:
+        for l in lines:
             pet = common.Pet(l)
             pets.append(pet)
             
@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     print("Generating state table...")
     state.gen(pets)
-    print("Done!")
+    print("\nDone!")
 
     print("Generating action table...")
     action.gen()
