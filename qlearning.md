@@ -36,6 +36,6 @@ n,n,n,n...
 - q-table
 
 ### Order
-lookup state -> lookup q-table -> lookup action
+lookup state -> lookup q-table(generated and updated by rust) -> lookup action
 
 loop this until money is zero
