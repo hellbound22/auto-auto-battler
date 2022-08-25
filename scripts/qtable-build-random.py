@@ -1,34 +1,27 @@
 import itertools
 
-class QShop:
-    def __init__(self, bucket, file_desc):
-        self.sets = []
-        set_len = len(bucket)+1
-        comb_len = 0
-        first = True
-        u_index = 0
-
-
-        def powerset(iterable):
+class QCrew:
+    def __init__(self, bucket, file_desc, size):
+        def powerset(iterable, size):
             "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
             s = list(iterable)
-            return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(6))
+            return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(size))
 
-        comb = powerset(bucket)
+        comb = powerset(bucket, size)
+        
         for x, subset in enumerate(comb):
-            file_desc.write(QShop.qtable_lst_str(subset))
+            file_desc.write(QCrew.qtable_lst_str(subset))
             print('Combination: ' + str(x) + '\r', end="")
 
     def qtable_lst_str(comb):
         c = comb
         s = ""
-        for p in c:
+        for i, p in enumerate(c):
             s += p.qtable_str()
             s += '|'
         
         s += '\n'
         return s
-
 
 
 class Pet:
@@ -49,12 +42,12 @@ pets = []
 with open("./packs/std.pets", "r") as fp:
     lines = fp.readlines()
 
-    for l in lines:
+    for l in lines[slice(10)]:
         pet = Pet(l)
         pets.append(pet)
 
 
 with open("./qtables/std.pets", "w") as fp:
     print("Writing to file...")
-    QShop(pets, fp)
+    QCrew(pets, fp, 11)
     pass
