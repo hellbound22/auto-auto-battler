@@ -25,3 +25,17 @@ buy pet X(store slot) to position Y(crew slot)
 ### Reinforcement 
 sum of pets power and health / no of turns passed
 
+### Q-table
+line where its number is the line number of the state table, and each number is the Q-value of an action. The index of this number is the line number of the action index
+- example
+n,n,n,n...
+
+### Tables
+- state
+- action
+- q-table
+
+### Order
+lookup state -> lookup q-table -> lookup action
+
+loop this until money is zero
