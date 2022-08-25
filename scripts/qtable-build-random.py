@@ -1,18 +1,33 @@
 import itertools
 
-
-
 class QShop:
     def __init__(self, bucket):
         self.sets = []
-        for L in range(0, len(bucket)+1):
-            for subset in itertools.combinations(bucket, 3):
+        set_len = len(bucket)+1
+        comb_len = 0
+        first = True
+        u_index = 0
+        for L in range(0, set_len):
+            comb = itertools.combinations(bucket, 5)
+            print("Set: " + str(L) + " of " + str(set_len))
+            for x, subset in enumerate(comb):
                 self.sets.append(subset)
+                if first:
+                    print('Combination: ' + str(x) + '\r', end="")
+                    comb_len = x
+                else:
+                    pct = (u_index/(comb_len * set_len))*100
+                    print('Combination: ' + str(x) + ' | ' + str(round(pct, 2)) + '%\r', end="")
+                
+                u_index += 1
+            
+            first = False
+            print("\033[1A", end="")
 
     def qtable_lst_str(self):
         s = []
         for c in self.sets:
-            s.append("{}|{}|{}\n".format(c[0].qtable_str(), c[1].qtable_str(), c[2].qtable_str()))
+            s.append("{}|{}|{}|{}|{}\n".format(c[0].qtable_str(), c[1].qtable_str(), c[2].qtable_str(), c[3].qtable_str(), c[4].qtable_str()))
         
         return s
 
@@ -46,6 +61,7 @@ qshop = QShop(pets)
 print(len(qshop.sets))
 
 with open("./qtables/std.pets", "w") as fp:
+    print("Writing to file...")
     for set in qshop.qtable_lst_str():
         fp.write(set)
 
