@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::food::Food;
 
 #[derive(Clone, Debug, Default)]
@@ -15,7 +17,7 @@ impl From<&Pet> for SPet {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct BPet {
     pub pet: Pet,
     pub level: u8,
@@ -27,6 +29,32 @@ pub struct BPet {
 impl BPet {
     pub fn switch_food(&mut self, food: Food) {
         self.food = Some(food);
+    }
+
+    pub fn new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
+        let split = line.split(",");
+        let vec = split.collect::<Vec<&str>>();
+        BPet {
+            pet: Pet::new_from_state_table(line, ref_pet),
+            level: vec[3].parse().unwrap(),
+            xp: vec[4].parse().unwrap(),
+            food: None,
+        }
+    }
+}
+
+impl fmt::Display for BPet {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "[{}] {} ({}|{}) = {}/{}",
+            self.pet.tier,
+            self.pet.name,
+            self.level,
+            self.xp,
+            self.pet.power,
+            self.pet.health
+        )
     }
 }
 
@@ -47,7 +75,7 @@ impl From<SPet> for Pet {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Pet {
     pub id: i8,
     pub tier: i8,
@@ -60,7 +88,25 @@ impl Pet {
     pub fn new(line: &str) -> Self {
         let split = line.split(",");
         let vec = split.collect::<Vec<&str>>();
-        Pet { id: vec[0].parse().unwrap(), tier: vec[1].parse().unwrap(), name: vec[2].to_string(), power: vec[3].parse().unwrap(), health: vec[4].parse().unwrap() }
+        Pet {
+            id: vec[0].parse().unwrap(),
+            tier: vec[1].parse().unwrap(),
+            name: vec[2].to_string(),
+            power: vec[3].parse().unwrap(),
+            health: vec[4].parse().unwrap(),
+        }
+    }
+
+    pub fn new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
+        let split = line.split(",");
+        let vec = split.collect::<Vec<&str>>();
+        Pet {
+            id: vec[0].parse().unwrap(),
+            tier: ref_pet.tier,
+            name: ref_pet.name.clone(),
+            power: vec[1].parse().unwrap(),
+            health: vec[2].parse().unwrap(),
+        }
     }
 }
 

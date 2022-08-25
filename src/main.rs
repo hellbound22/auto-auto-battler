@@ -5,29 +5,22 @@ mod game;
 mod battle;
 mod util;
 mod food;
+mod qlearning;
 
 use game::Game;
 
 
 fn main() {
     let mut game = Game::new("std");
+    qlearning::StateTable::new("./qtables/std/state.table", game.get_buckets());
+    
+    std::process::exit(0);
+
+    
     let mut bot = Game::new("std");
 
     game.bot_random();
     bot.bot_random();
     
-    // println!("{}", game);
-    // game.roll_shop(1);
-    // println!("{}", game);
-
-    //game.swap_pet(0, 4);
-    /* 
-    
-    println!("======================BATTLE====================");
-    
-
-    
-    */
-    //println!("{}", game);
     game.game_loop(bot.crew.clone());
 }

@@ -42,6 +42,10 @@ impl Game {
         }
     }
 
+    pub fn get_buckets(&self) -> (&Vec<Pet>, &Vec<Food>) {
+        (&self.store.pet_bucket, &self.store.food_bucket)
+    }
+
     pub fn bot_random(&mut self) {
         self.roll_shop(0);
         for x in 0..3 {

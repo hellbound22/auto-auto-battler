@@ -8,10 +8,10 @@ use crate::food::Food;
 #[derive(Debug, Default)]
 pub struct Store {
     pets: Vec<Option<SPet>>,
-    pet_bucket: Vec<Pet>,
+    pub pet_bucket: Vec<Pet>,
     pet_slots: u8,
     foods: Vec<Option<Food>>, 
-    food_bucket: Vec<Food>, 
+    pub food_bucket: Vec<Food>, 
     food_slots: u8,
     // TODO: Implement food   
 }
