@@ -23,6 +23,7 @@ A Super Auto Pets simulation engine
   - [x] Turn 9 +1 pet slot   
 - [ ] Use current life implementation
 - [ ] AI!!!!!!!
+  - [ ] Q-learning (avalible at the q-learning branch)
 
 #### Notes
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
