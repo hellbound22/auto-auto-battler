@@ -1,26 +1,31 @@
 import itertools
+import json
 
 class QCrew:
     def __init__(self, bucket, file_desc, size):
         def powerset(iterable, size):
             "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
             s = list(iterable)
-            return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(size))
+            return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(size+1))
 
-        comb = powerset(bucket, size)
-        
-        for x, subset in enumerate(comb):
-            file_desc.write(QCrew.qtable_lst_str(subset))
-            print('Combination: ' + str(x) + '\r', end="")
+        comb = list(powerset(bucket, size))
+        crew = list(comb)
+
+        for x in crew:
+            for y in crew:
+                file_desc.write(QCrew.qtable_lst_str(x))
+                file_desc.write(";")
+                file_desc.write(QCrew.qtable_lst_str(y))
+                file_desc.write("\n")
+
 
     def qtable_lst_str(comb):
-        c = comb
         s = ""
-        for i, p in enumerate(c):
+
+        for p in comb:
             s += p.qtable_str()
             s += '|'
-        
-        s += '\n'
+
         return s
 
 
@@ -49,5 +54,5 @@ with open("./packs/std.pets", "r") as fp:
 
 with open("./qtables/std.pets", "w") as fp:
     print("Writing to file...")
-    QCrew(pets, fp, 11)
+    QCrew(pets, fp, 5)
     pass
