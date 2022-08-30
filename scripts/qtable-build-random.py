@@ -16,7 +16,7 @@ if __name__ == "__main__":
     print("Done!")
 
     print("Generating state table...")
-    state.gen(pets[slice(10)])
+    state.gen(pets[slice(20)])
     print("\nDone!")
 
     print("Generating action table...")

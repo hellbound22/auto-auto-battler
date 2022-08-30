@@ -1,5 +1,4 @@
 use std::fs::File;
-use std::hash::Hash;
 use std::io::prelude::*;
 use std::io::BufReader;
 use std::collections::HashMap;
@@ -11,7 +10,7 @@ use crate::food::Food;
 pub struct StateTable {
     map: HashMap<Option<BPet>, usize>,
     pet_bucket: HashMap<u8, Pet>,
-    buffer: BufReader<File>,
+    buffer: String,
 }
 
 impl StateTable {
@@ -37,19 +36,29 @@ impl StateTable {
             map.insert(ref_pet, s[1].parse().unwrap());
         }
 
-        let file = File::open(state_path).unwrap();
-
         Self {
             map,
             pet_bucket: buckets.0,
-            buffer: BufReader::new(file),
+            buffer: state_path.to_owned(),
         }
     }
 
     fn get_state_table_index_range(&self, pet: Option<BPet>) -> (usize, usize) {
-        let p = *self.map.get(&pet).unwrap();
-        let next = self.map.get(&self.pet_bucket.get(&(pet.unwrap().pet.id as u8)).map(|x| x.clone().into())).unwrap();
+        let p = *self.map.get(&pet).unwrap(); // TODO: If pet is none use default
+        dbg!(p);
+        let next = self.map.get(&self.pet_bucket.get(&((pet.unwrap().pet.id) as u8)).map(|x| x.clone().into())).unwrap();
         (p, *next)
+    }
+
+    pub fn get_state(&self, crew: Vec<Option<BPet>>) {
+        dbg!(&crew);
+        let index_range = self.get_state_table_index_range(crew[0].as_ref().map(|x| x.to_owned()));
+
+        let file = File::open(self.buffer.clone()).unwrap();
+        let buf_reader = BufReader::new(file);
+        let line_iter = buf_reader.lines().nth(index_range.0);
+        
+        dbg!(line_iter);
     }
 
 }

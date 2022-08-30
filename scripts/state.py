@@ -23,9 +23,9 @@ class State:
                 for x in comb:
                     id = x[0].id
                     if id != last_id:
-                        meta_file.write(str(last_id) + "," + str(u_index) + "\n")
-                        print(last_id)
                         last_id = id
+                        meta_file.write(str(last_id) + "," + str(u_index) + "\n")
+                        
 
                     
                     #for y in comb:
@@ -40,7 +40,7 @@ class State:
                     #file_desc.write(State.lst_str(y))
                     file_desc.write("\n")
 
-                    #print('Writing to file: ' + str(u_index) + " of " + str(l) + " - " + str(round((u_index/l)*100, 2)) + '%  \r', end="")
+                    print('Writing to file: ' + str(u_index) + " of " + str(l) + " - " + str(round((u_index/l)*100, 2)) + '%  \r', end="")
 
 
     def lst_str(comb):
