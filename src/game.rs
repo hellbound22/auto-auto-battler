@@ -1,6 +1,8 @@
 use std::fmt;
 use std::fs::File;
+use std::hash::Hash;
 use std::io::prelude::*;
+use std::collections::HashMap;
 
 use crate::crew::Crew;
 use crate::food::Food;
@@ -42,8 +44,17 @@ impl Game {
         }
     }
 
-    pub fn get_buckets(&self) -> (&Vec<Pet>, &Vec<Food>) {
-        (&self.store.pet_bucket, &self.store.food_bucket)
+    pub fn get_buckets(&self) -> (HashMap<u8, Pet>, &Vec<Food>) {
+        let mut hm = HashMap::new();
+
+        for pet in &self.store.pet_bucket {
+            hm.insert(pet.id.clone() as u8, pet.clone());
+        }
+        (hm, &self.store.food_bucket)
+    }
+
+    pub fn get_state(&self) -> &Vec<Option<BPet>> {
+        &self.crew.team
     }
 
     pub fn bot_random(&mut self) {

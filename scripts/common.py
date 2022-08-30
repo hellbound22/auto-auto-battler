@@ -1,9 +1,12 @@
 import itertools
 
 def powerset(iterable, size):
-    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-    s = list(iterable)
-    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(size+1))
+    list_combinations = list()
+
+    for n in range(size):
+        list_combinations += list(itertools.combinations_with_replacement(iterable, n))
+
+    return list_combinations
 
 
 class Pet:
@@ -18,3 +21,4 @@ class Pet:
 
     def qtable_str(self):
         return "{},{},{},{},{}".format(self.id, self.power, self.health, self.level, self.xp)
+        #return "{}".format(self.id)

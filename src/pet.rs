@@ -17,7 +17,7 @@ impl From<&Pet> for SPet {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd)]
 pub struct BPet {
     pub pet: Pet,
     pub level: u8,
@@ -25,6 +25,13 @@ pub struct BPet {
     pub food: Option<Food>,
     // TODO: Implement food
 }
+
+impl std::hash::Hash for BPet {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.pet.id.hash(state);
+    }
+}
+
 
 impl BPet {
     pub fn switch_food(&mut self, food: Food) {
@@ -69,13 +76,24 @@ impl Default for BPet {
     }
 }
 
+impl From<Pet> for BPet {
+    fn from(item: Pet) -> Self {
+        Self {
+            pet: item,
+            level: 1,
+            xp: 0,
+            food: None,
+        }
+    }
+}
+
 impl From<SPet> for Pet {
     fn from(item: SPet) -> Self {
         item.pet
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd)]
 pub struct Pet {
     pub id: i8,
     pub tier: i8,
@@ -109,6 +127,13 @@ impl Pet {
         }
     }
 }
+
+impl std::hash::Hash for Pet {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.id.hash(state);
+    }
+}
+
 
 impl Default for Pet {
     fn default() -> Self {
