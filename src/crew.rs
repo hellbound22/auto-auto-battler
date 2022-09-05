@@ -23,20 +23,31 @@ impl Crew {
     }
 
     // TODO: error handle this
-    pub fn pay(&mut self, price: u8) {
+    pub fn pay(&mut self, price: u8) -> Result<(), ()> {
+        if self.gold < price {
+            return Err(())
+        }
         self.gold -= price;
+        Ok(())
     }
 
-    pub fn sell_pet(&mut self, pet: usize) {
+    pub fn sell_pet(&mut self, pet: usize) -> Result<(), ()> {
+        if pet >= 5 {
+            return Err(());
+        }
         let pet = &mut self.friends[pet];
 
         if pet.is_some() {
             self.gold += pet.as_mut().unwrap().level;
             *pet = None;
         }
+        Ok(())
     }
 
     pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<u8, ()> {
+        if slot as usize >= self.friends.len() {
+            return Err(());
+        }
         let curr_pet = &mut self.friends[slot as usize];
         match curr_pet {
             Some(x) => {
@@ -82,10 +93,15 @@ impl Crew {
         team
     }
 
-    pub fn _reorder(&mut self, pet_one: usize, pet_two: usize) {
+    pub fn _reorder(&mut self, pet_one: usize, pet_two: usize) -> Result<(), ()> {
+        if pet_one >= 5 || pet_two >= 5 {
+            return Err(());
+        }
         let swap_aux = self.friends[pet_one].clone();
         self.friends[pet_one] = self.friends[pet_two].to_owned();
         self.friends[pet_two] = swap_aux;
+
+        Ok(())
     }
 }
 

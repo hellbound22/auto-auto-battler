@@ -12,9 +12,9 @@ use crate::food::Food;
 
 // Curr_friends -> Shop_friends -> Action -> calculate 
 pub struct Brain {
-    pub q_table: HashMap<usize, HashMap<(u8, u8), f64>>,
+    pub q_table: HashMap<usize, HashMap<(u8, u8, u8), f64>>,
     pub state_table: Vec<(Vec<Option<BPet>>, Vec<Option<BPet>>)>,
-    pub action_map: Vec<(u8, u8)>,
+    pub action_map: Vec<(u8, u8, u8)>,
 }
 
 impl Brain {
@@ -23,13 +23,13 @@ impl Brain {
         let file = File::open("qtables/std/action.table").unwrap();
         let buf_reader = BufReader::new(file);
 
-        let mut map: Vec<(u8, u8)> = Vec::new();
+        let mut map: Vec<(u8, u8, u8)> = Vec::new();
 
         for line in buf_reader.lines() {
             let line = line.unwrap();
             let s = line.split(',').collect::<Vec<&str>>();
 
-            map.push((s[0].parse().unwrap(), s[1].parse().unwrap()));
+            map.push((s[0].parse().unwrap(), s[1].parse().unwrap(), s[2].parse().unwrap()));
 
         }
 
@@ -40,7 +40,7 @@ impl Brain {
         }
     }
 
-    pub fn get_action_map_random(&self) -> HashMap<(u8, u8), f64> {
+    pub fn get_action_map_random(&self) -> HashMap<(u8, u8, u8), f64> {
         let mut map = HashMap::new();
 
         let mut rng = rand::thread_rng();
@@ -52,7 +52,7 @@ impl Brain {
         map
     }
 
-    pub fn process(&mut self, game: crate::game::Game) {
+    pub fn process(&mut self, mut game: crate::game::Game) {
 
         let discount_factor = 1.0;
         let alpha = 0.6;
@@ -71,25 +71,37 @@ impl Brain {
         
         let actions = self.get_action_map_random();
 
-        let q = self.q_table.entry(index).or_insert(actions);
+        for _ in 0..100 {
+            let q = self.q_table.entry(index).or_insert(actions.clone());
 
-        let best_next_action = q.values().fold(std::f64::MIN, |a,b| a.max(*b));
-        //let worse_next_action = q.values().fold(std::f64::MAX, |a,b| a.min(*b));
+            let best_next_action = q.values().fold(std::f64::MIN, |a,b| a.max(*b));
+            //let worse_next_action = q.values().fold(std::f64::MAX, |a,b| a.min(*b));
 
-        //dbg!(best_next_action);
-        //dbg!(worse_next_action);
+            //dbg!(best_next_action);
+            //dbg!(worse_next_action);
 
-        let actual_q = q.get_mut(&(0,0)).unwrap();
+            let actual_q = q.get_mut(&(0,0,0)).unwrap();
 
-        let reward = game.reward();
+            let mut rng = rand::thread_rng();
+            let random_action = self.action_map.choose(&mut rng).unwrap();
+            
+            if game.crew.gold == 0 {
+                game.take_action((99,0,0)).unwrap();    
+            }
 
-        let td_target = reward as f64 + discount_factor * best_next_action;
-        let td_delta = td_target - *actual_q;
+            if game.take_action(*random_action).is_err() {
+                continue;
+            }
 
-        *actual_q += alpha + td_delta;
+            let reward = game.reward();
 
-        dbg!(actual_q);
+            let td_target = reward as f64 + discount_factor * best_next_action;
+            let td_delta = td_target - *actual_q;
 
+            *actual_q += alpha + td_delta;
+
+            dbg!(actual_q);
+        }
     }
 
 }
