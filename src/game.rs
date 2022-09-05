@@ -54,7 +54,7 @@ impl Game {
     }
 
     pub fn get_state(&self) -> &Vec<Option<BPet>> {
-        &self.crew.team
+        &self.crew.friends
     }
 
     pub fn bot_random(&mut self) {
@@ -99,7 +99,7 @@ impl Game {
 
         match food.type_effect {
             0 => {
-                let pet = self.crew.team[pet_slot as usize].as_mut();
+                let pet = self.crew.friends[pet_slot as usize].as_mut();
                 pet.unwrap().switch_food(food);
                 self.crew.pay(3);
             }
@@ -127,8 +127,8 @@ impl Game {
             }
 
             // TODO: change how the attacker is chosen
-            let my_attacker = &mut my_crew.team[my_index];
-            let enemy_attacker = &mut enemy_crew.team[enemy_index];
+            let my_attacker = &mut my_crew.friends[my_index];
+            let enemy_attacker = &mut enemy_crew.friends[enemy_index];
 
             // BUG
             if my_attacker.is_none() {

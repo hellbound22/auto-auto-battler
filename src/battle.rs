@@ -17,7 +17,7 @@ pub fn check_life(pet: &mut Option<BPet>) -> bool {
 pub fn check_win_condition(my_crew: &Crew, enemy_crew: &Crew) -> u8 {
     let mut my_alive = 0;
     let mut enemy_alive = 0;
-    for pet in &my_crew.team {
+    for pet in &my_crew.friends {
         if pet.is_none() {
             continue;
         }
@@ -26,7 +26,7 @@ pub fn check_win_condition(my_crew: &Crew, enemy_crew: &Crew) -> u8 {
         }
     }
 
-    for pet in &enemy_crew.team {
+    for pet in &enemy_crew.friends {
         if pet.is_none() {
             continue;
         }
