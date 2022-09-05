@@ -52,7 +52,7 @@ impl Brain {
         map
     }
 
-    pub fn process(&mut self, mut game: crate::game::Game) {
+    pub fn process(&mut self, game: &mut crate::game::Game) {
 
         let discount_factor = 1.0;
         let alpha = 0.6;
@@ -70,6 +70,9 @@ impl Brain {
         };
         
         let actions = self.get_action_map_random();
+
+        let mut num_actions = 0;
+        let mut max_reward = 0.;
 
         for _ in 0..100 {
             let q = self.q_table.entry(index).or_insert(actions.clone());
@@ -93,15 +96,20 @@ impl Brain {
                 continue;
             }
 
-            let reward = game.reward();
+            let reward = game.reward() as f64 / game.crew.turn as f64;
 
-            let td_target = reward as f64 + discount_factor * best_next_action;
+            if reward > max_reward {max_reward = reward}
+
+            let td_target = reward + discount_factor * best_next_action;
             let td_delta = td_target - *actual_q;
 
             *actual_q += alpha + td_delta;
 
-            dbg!(actual_q);
+            //dbg!(reward);
+            num_actions += 1;
         }
+
+        dbg!(max_reward);
     }
 
 }

@@ -15,7 +15,7 @@ impl Crew {
     pub fn new() -> Self {
         Crew {
             gold: 10,
-            lifes: 40,
+            lifes: 4,
             wins: 0,
             turn: 1,
             friends: vec![None; 5],

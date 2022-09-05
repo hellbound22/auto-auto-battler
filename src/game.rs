@@ -164,8 +164,8 @@ impl Game {
         }
     }
 
-    pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
-        self.crew._reorder(pet_one, pet_two);
+    pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) -> Result<(), ()> {
+        self.crew._reorder(pet_one, pet_two)
     }
 
     pub fn take_action(&mut self, action: (u8, u8, u8)) -> Result<(), ()> {
@@ -176,8 +176,7 @@ impl Game {
             }
             // swap mode
             2 => {
-                self.swap_pet(action.1 as usize, action.2 as usize);
-                Ok(())
+                self.swap_pet(action.1 as usize, action.2 as usize)
             }
             // Roll shop
             3 => {
@@ -185,13 +184,11 @@ impl Game {
             }
             // Sell pet
             4 => {
-                self.crew.sell_pet(action.1 as usize); // TODO: Check for error
-                Ok(())
+                self.crew.sell_pet(action.1 as usize) // TODO: Check for error
             }
             // Freeze pet
             5 => {
-                self.store.freeze_and_unfreeze_pet(action.2 as usize);
-                Ok(())
+                self.store.freeze_and_unfreeze_pet(action.2 as usize)
             }
             // buy food
             6 => {
@@ -199,11 +196,14 @@ impl Game {
             }
             // freeze food
             7 => {
-                self.store.freeze_and_unfreeze_food(action.1 as usize);
-                Ok(())
+                self.store.freeze_and_unfreeze_food(action.1 as usize)
             }
             // end turn mode
-            99 => Ok(()),
+            99 => { 
+                self.crew.gold = 10;
+                self.crew.turn += 1;
+                Ok(()) 
+            },
             _ => { Err(()) }
         }
     }

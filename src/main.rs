@@ -16,16 +16,15 @@ fn main() {
     //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
     let mut brain = Brain::new();
 
-    for _x in 0..1 {
+    for _x in 0..100 {
         let mut game = Game::new("std");
         
         //game.bot_random();
         //game.roll_shop(1);
-        
-        println!("{}", game);
 
-        brain.process(game);
+        brain.process(&mut game);
 
+        //println!("{}", game);
         
     }
     
