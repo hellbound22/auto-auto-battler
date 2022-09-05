@@ -157,6 +157,12 @@ impl Game {
         self.crew._reorder(pet_one, pet_two);
     }
 
+    pub fn reward(&self) -> i8 {
+        let mut x = 0;
+        self.crew.friends.iter().for_each(|e| x += e.clone().unwrap_or_default().pet.health + e.clone().unwrap_or_default().pet.power);
+        x
+    }
+
     pub fn get_shop(&self) -> Vec<Option<BPet>> {
         self.store.pets.iter().map(|x| Some(x.as_ref().unwrap().into())).collect()
     }

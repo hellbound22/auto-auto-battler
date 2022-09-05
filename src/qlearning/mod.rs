@@ -12,7 +12,7 @@ use crate::food::Food;
 
 // Curr_friends -> Shop_friends -> Action -> calculate 
 pub struct Brain {
-    pub q_table: HashMap<usize, HashMap<u8, (u8, u8)>>,
+    pub q_table: HashMap<usize, HashMap<(u8, u8), f64>>,
     pub state_table: Vec<(Vec<Option<BPet>>, Vec<Option<BPet>>)>,
     pub action_map: Vec<(u8, u8)>,
 }
@@ -40,19 +40,25 @@ impl Brain {
         }
     }
 
-    pub fn get_action_map_random(&self) -> HashMap<u8, (u8, u8)> {
+    pub fn get_action_map_random(&self) -> HashMap<(u8, u8), f64> {
         let mut map = HashMap::new();
 
         let mut rng = rand::thread_rng();
 
         for pair in &self.action_map {
-            map.insert(rng.gen(), pair.clone());
+            map.insert(pair.clone(), rng.gen());
         }
 
         map
     }
 
     pub fn process(&mut self, game: crate::game::Game) {
+
+        let discount_factor = 1.0;
+        let alpha = 0.6;
+        let epsilon = 0.1;
+
+
         let state = (game.get_state().to_owned(), game.get_shop().to_owned());
 
         let index = match self.state_table.binary_search(&state) {
@@ -67,7 +73,22 @@ impl Brain {
 
         let q = self.q_table.entry(index).or_insert(actions);
 
-        dbg!(q);
+        let best_next_action = q.values().fold(std::f64::MIN, |a,b| a.max(*b));
+        //let worse_next_action = q.values().fold(std::f64::MAX, |a,b| a.min(*b));
+
+        //dbg!(best_next_action);
+        //dbg!(worse_next_action);
+
+        let actual_q = q.get_mut(&(0,0)).unwrap();
+
+        let reward = game.reward();
+
+        let td_target = reward as f64 + discount_factor * best_next_action;
+        let td_delta = td_target - *actual_q;
+
+        *actual_q += alpha + td_delta;
+
+        dbg!(actual_q);
 
     }
 
