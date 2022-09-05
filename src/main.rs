@@ -8,17 +8,28 @@ mod food;
 mod qlearning;
 
 use game::Game;
+use qlearning::Brain;
 
 
 fn main() {
-    let mut game = Game::new("std");
-    //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
-    game.bot_random();
-
-    //states.get_state(game.crew.team);
-    //dbg!(states.get_state_index(game.get_state()));
-
     
+    //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
+    let mut brain = Brain::new();
+
+    for _x in 0..100 {
+        let mut game = Game::new("std");
+        
+        game.bot_random();
+        game.roll_shop(1);
+        
+        println!("{}", game);
+
+        brain.process(game);
+
+        
+    }
+    
+    /* 
     std::process::exit(0);
 
     
@@ -28,4 +39,5 @@ fn main() {
     bot.bot_random();
     
     game.game_loop(bot.crew.clone());
+    */
 }

@@ -157,6 +157,10 @@ impl Game {
         self.crew._reorder(pet_one, pet_two);
     }
 
+    pub fn get_shop(&self) -> Vec<Option<BPet>> {
+        self.store.pets.iter().map(|x| Some(x.as_ref().unwrap().into())).collect()
+    }
+
     pub fn roll_shop(&mut self, price: u8) {
         let tier = (self.crew.turn as f32 / 2.).ceil();
         self.store.roll(self.crew.turn, tier);

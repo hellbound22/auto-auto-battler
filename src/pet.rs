@@ -17,6 +17,15 @@ impl From<&Pet> for SPet {
     }
 }
 
+impl From<&SPet> for BPet {
+    fn from(item: &SPet) -> Self {
+        Self {
+            pet: item.pet.clone(),
+            ..Default::default()
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd)]
 pub struct BPet {
     pub pet: Pet,
