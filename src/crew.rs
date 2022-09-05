@@ -8,36 +8,47 @@ pub struct Crew {
     pub lifes: u8,
     pub wins: u8,
     pub turn: u8,
-    pub team: Vec<Option<BPet>>,
+    pub friends: Vec<Option<BPet>>,
 }
 
 impl Crew {
     pub fn new() -> Self {
         Crew {
             gold: 10,
-            lifes: 40,
+            lifes: 4,
             wins: 0,
             turn: 1,
-            team: vec![None; 5],
+            friends: vec![None; 5],
         }
     }
 
     // TODO: error handle this
-    pub fn pay(&mut self, price: u8) {
+    pub fn pay(&mut self, price: u8) -> Result<(), ()> {
+        if self.gold < price {
+            return Err(())
+        }
         self.gold -= price;
+        Ok(())
     }
 
-    pub fn sell_pet(&mut self, pet: usize) {
-        let pet = &mut self.team[pet];
+    pub fn sell_pet(&mut self, pet: usize) -> Result<(), ()> {
+        if pet >= 5 {
+            return Err(());
+        }
+        let pet = &mut self.friends[pet];
 
         if pet.is_some() {
             self.gold += pet.as_mut().unwrap().level;
             *pet = None;
         }
+        Ok(())
     }
 
     pub fn add_pet(&mut self, pet: BPet, slot: u8) -> Result<u8, ()> {
-        let curr_pet = &mut self.team[slot as usize];
+        if slot as usize >= self.friends.len() {
+            return Err(());
+        }
+        let curr_pet = &mut self.friends[slot as usize];
         match curr_pet {
             Some(x) => {
                 if x.pet.id == pet.pet.id {
@@ -64,7 +75,7 @@ impl Crew {
 
     pub fn d_team(&self) -> String {
         let mut team = String::new();
-        for p in &self.team {
+        for p in &self.friends {
             if p.is_some() {
                 team.push_str(&format!(
                     "[{}] {} ({}|{}) = {}/{}\n",
@@ -82,10 +93,15 @@ impl Crew {
         team
     }
 
-    pub fn _reorder(&mut self, pet_one: usize, pet_two: usize) {
-        let swap_aux = self.team[pet_one].clone();
-        self.team[pet_one] = self.team[pet_two].to_owned();
-        self.team[pet_two] = swap_aux;
+    pub fn _reorder(&mut self, pet_one: usize, pet_two: usize) -> Result<(), ()> {
+        if pet_one >= 5 || pet_two >= 5 {
+            return Err(());
+        }
+        let swap_aux = self.friends[pet_one].clone();
+        self.friends[pet_one] = self.friends[pet_two].to_owned();
+        self.friends[pet_two] = swap_aux;
+
+        Ok(())
     }
 }
 

@@ -1,6 +1,8 @@
 use std::fmt;
 use std::fs::File;
+use std::hash::Hash;
 use std::io::prelude::*;
+use std::collections::HashMap;
 
 use crate::crew::Crew;
 use crate::food::Food;
@@ -42,6 +44,19 @@ impl Game {
         }
     }
 
+    pub fn get_buckets(&self) -> (HashMap<u8, Pet>, &Vec<Food>) {
+        let mut hm = HashMap::new();
+
+        for pet in &self.store.pet_bucket {
+            hm.insert(pet.id.clone() as u8, pet.clone());
+        }
+        (hm, &self.store.food_bucket)
+    }
+
+    pub fn get_state(&self) -> &Vec<Option<BPet>> {
+        &self.crew.friends
+    }
+
     pub fn bot_random(&mut self) {
         self.roll_shop(0);
         for x in 0..3 {
@@ -49,13 +64,15 @@ impl Game {
         }
     }
 
-    pub fn buy_pet(&mut self, slot: u8, team_slot: u8) {
+    pub fn buy_pet(&mut self, slot: u8, team_slot: u8) -> Result<(), ()>{
         if team_slot > 5 {
-            return;
+            return Err(());
         }
 
+        let pet = match self.store.remove_pet(slot) { Ok(pet) => pet, Err(x) => return Err(x)};
+
         let b = BPet {
-            pet: self.store.remove_pet(slot),
+            pet,
             xp: 0,
             level: 1,
             food: None, // WARN: Some pets come with foods
@@ -75,20 +92,29 @@ impl Game {
             Err(_) => {}
         }
 
-        self.crew.pay(3);
+        self.crew.pay(3)
     }
 
-    pub fn buy_food(&mut self, shop_slot: u8, pet_slot: u8) {
+    pub fn buy_food(&mut self, shop_slot: u8, pet_slot: u8) -> Result<(), ()> {
+        if pet_slot as usize >= self.crew.friends.len() {
+            return Err(());
+        }
         // WARN some foods have team and store wide effects
-        let food = self.store.remove_food(shop_slot);
+        let food = self.store.remove_food(shop_slot)?;
 
         match food.type_effect {
             0 => {
-                let pet = self.crew.team[pet_slot as usize].as_mut();
-                pet.unwrap().switch_food(food);
-                self.crew.pay(3);
+                let pet = self.crew.friends[pet_slot as usize].as_mut();
+                if let Some(pet) = pet {
+                    pet.switch_food(food);
+                    self.crew.pay(3)
+                } else {
+                    Err(())
+                }
             }
-            _ => {}
+            _ => {
+                Err(())
+            }
         }
         
     }
@@ -112,8 +138,8 @@ impl Game {
             }
 
             // TODO: change how the attacker is chosen
-            let my_attacker = &mut my_crew.team[my_index];
-            let enemy_attacker = &mut enemy_crew.team[enemy_index];
+            let my_attacker = &mut my_crew.friends[my_index];
+            let enemy_attacker = &mut enemy_crew.friends[enemy_index];
 
             // BUG
             if my_attacker.is_none() {
@@ -138,14 +164,64 @@ impl Game {
         }
     }
 
-    pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) {
-        self.crew._reorder(pet_one, pet_two);
+    pub fn swap_pet(&mut self, pet_one: usize, pet_two: usize) -> Result<(), ()> {
+        self.crew._reorder(pet_one, pet_two)
     }
 
-    pub fn roll_shop(&mut self, price: u8) {
+    pub fn take_action(&mut self, action: (u8, u8, u8)) -> Result<(), ()> {
+        match action.0 {
+            // buy mode
+            1 => {
+                self.buy_pet(action.1, action.2)
+            }
+            // swap mode
+            2 => {
+                self.swap_pet(action.1 as usize, action.2 as usize)
+            }
+            // Roll shop
+            3 => {
+                self.roll_shop(1)
+            }
+            // Sell pet
+            4 => {
+                self.crew.sell_pet(action.1 as usize) // TODO: Check for error
+            }
+            // Freeze pet
+            5 => {
+                self.store.freeze_and_unfreeze_pet(action.2 as usize)
+            }
+            // buy food
+            6 => {
+                self.buy_food(action.1, action.2)
+            }
+            // freeze food
+            7 => {
+                self.store.freeze_and_unfreeze_food(action.1 as usize)
+            }
+            // end turn mode
+            99 => { 
+                self.crew.gold = 10;
+                self.crew.turn += 1;
+                Ok(()) 
+            },
+            _ => { Err(()) }
+        }
+    }
+
+    pub fn reward(&self) -> i8 {
+        let mut x = 0;
+        self.crew.friends.iter().for_each(|e| x += e.clone().unwrap_or_default().pet.health + e.clone().unwrap_or_default().pet.power);
+        x
+    }
+
+    pub fn get_shop(&self) -> Vec<Option<BPet>> {
+        self.store.pets.iter().map(|x| Some(x.clone().unwrap_or_default().into())).collect()
+    }
+
+    pub fn roll_shop(&mut self, price: u8) -> Result<(), ()> {
         let tier = (self.crew.turn as f32 / 2.).ceil();
         self.store.roll(self.crew.turn, tier);
-        self.crew.pay(price);
+        self.crew.pay(price)
     }
 
     pub fn game_loop(&mut self, bot: Crew) {

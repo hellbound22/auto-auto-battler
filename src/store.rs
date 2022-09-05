@@ -7,11 +7,11 @@ use crate::food::Food;
 
 #[derive(Debug, Default)]
 pub struct Store {
-    pets: Vec<Option<SPet>>,
-    pet_bucket: Vec<Pet>,
+    pub pets: Vec<Option<SPet>>,
+    pub pet_bucket: Vec<Pet>,
     pet_slots: u8,
     foods: Vec<Option<Food>>, 
-    food_bucket: Vec<Food>, 
+    pub food_bucket: Vec<Food>, 
     food_slots: u8,
     // TODO: Implement food   
 }
@@ -90,20 +90,58 @@ impl Store {
         new_food
     }
 
-    pub fn freeze_and_unfreeze_pet(&mut self, slot: usize) {
-        self.pets[slot].as_mut().unwrap().frozen = self.pets[slot].as_ref().unwrap().frozen ^ true;
+    pub fn freeze_and_unfreeze_pet(&mut self, slot: usize) -> Result<(), ()> {
+        let target_pet = if let Some(pet) = self.pets.get_mut(slot) {
+            pet
+        } else {
+            return Err(());
+        };
+
+        let target_pet = if let Some(pet) = target_pet {
+            pet
+        } else {
+            return Err(());
+        };
+
+        target_pet.frozen = target_pet.frozen ^ true;
+        Ok(())
     }
 
-    pub fn freeze_and_unfreeze_food(&mut self, slot: usize) {
-        self.foods[slot].as_mut().unwrap().frozen = self.foods[slot].as_ref().unwrap().frozen ^ true;
+    pub fn freeze_and_unfreeze_food(&mut self, slot: usize) -> Result<(), ()> {
+        let target_food = if let Some(food) = self.foods.get_mut(slot) {
+            food
+        } else {
+            return Err(());
+        };
+
+        let target_food = if let Some(food) = target_food {
+            food
+        } else {
+            return Err(());
+        };
+
+        target_food.frozen = target_food.frozen ^ true;
+        Ok(())
     }
 
-    pub fn remove_pet(&mut self, slot: u8) -> Pet {
-        self.pets.remove(slot.into()).unwrap().into()
+    pub fn remove_pet(&mut self, slot: u8) -> Result<Pet, ()> {
+        if self.pets.len() <= slot as usize {
+            return Err(());
+        }
+        match self.pets.remove(slot.into()) {
+            Some(pet) => { Ok(pet.into()) },
+            None => { Err(()) },
+        }
     } 
 
-    pub fn remove_food(&mut self, slot: u8) -> Food {
-        self.foods.remove(slot.into()).unwrap().into()
+    pub fn remove_food(&mut self, slot: u8) -> Result<Food, ()> {
+        if self.foods.len() <= slot as usize {
+            return Err(());
+        }
+        match self.foods.remove(slot.into()) {
+            Some(food) => { Ok(food.into()) },
+            None => { Err(()) },
+        }
     } 
 }
 

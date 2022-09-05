@@ -1,3 +1,4 @@
 /target
 .vscode/
 qtables/
+scripts/__pycache__/

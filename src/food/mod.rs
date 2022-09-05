@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Ord, PartialOrd)]
 pub struct Food {
     pub id: i8,
     pub tier: i8,
@@ -12,6 +12,13 @@ pub struct Food {
     */
 
 }
+
+impl std::hash::Hash for Food {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.id.hash(state);
+    }
+}
+
 
 impl Food {
     pub fn new(line: &str) -> Self {
