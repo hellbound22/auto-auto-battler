@@ -19,11 +19,37 @@ pub struct Brain {
 
 impl Brain {
     pub fn new() -> Self {
+
+        let file = File::open("qtables/std/action.table").unwrap();
+        let buf_reader = BufReader::new(file);
+
+        let mut map: Vec<(u8, u8)> = Vec::new();
+
+        for line in buf_reader.lines() {
+            let line = line.unwrap();
+            let s = line.split(',').collect::<Vec<&str>>();
+
+            map.push((s[0].parse().unwrap(), s[1].parse().unwrap()));
+
+        }
+
         Self {
             q_table: HashMap::new(),
             state_table: Vec::new(),
-            action_map: Vec::new(),
+            action_map: map,
         }
+    }
+
+    pub fn get_action_map_random(&self) -> HashMap<u8, (u8, u8)> {
+        let mut map = HashMap::new();
+
+        let mut rng = rand::thread_rng();
+
+        for pair in &self.action_map {
+            map.insert(rng.gen(), pair.clone());
+        }
+
+        map
     }
 
     pub fn process(&mut self, game: crate::game::Game) {
@@ -36,24 +62,10 @@ impl Brain {
                 x
             }
         };
-
-        let mut rng = rand::thread_rng();
         
-        
-        let file = File::open("qtables/std/action.table").unwrap();
-        let buf_reader = BufReader::new(file);
+        let actions = self.get_action_map_random();
 
-        let mut map = HashMap::new();
-
-        for line in buf_reader.lines() {
-            let line = line.unwrap();
-            let s = line.split(',').collect::<Vec<&str>>();
-
-            map.insert(rng.gen(), (s[0].parse().unwrap(), s[1].parse().unwrap()));
-
-        }
-
-        let q = self.q_table.entry(index).or_insert(map);
+        let q = self.q_table.entry(index).or_insert(actions);
 
         dbg!(q);
 
