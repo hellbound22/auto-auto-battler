@@ -47,13 +47,17 @@ impl Brain {
         let mut rng = rand::thread_rng();
 
         for pair in &self.action_map {
-            map.insert(pair.clone(), rng.gen());
+            let mut q = rng.gen();
+            if pair == &(0,0,0) {
+                q = std::f64::MIN;
+            }
+            map.insert(pair.clone(), q);
         }
 
         map
     }
 
-    pub fn process(&mut self, game: &mut crate::game::Game) {
+    pub fn process(&mut self, game: &mut crate::game::Game) -> f64 {
 
         let discount_factor = 1.0;
         let alpha = 0.6;
@@ -93,10 +97,10 @@ impl Brain {
             if best_next_action == (0,0,0) {
                 let mut rng = rand::thread_rng();
                 best_next_action = *self.action_map.choose(&mut rng).unwrap();
-                println!("Best next action is doing nothing");
+                //println!("Best next action was doing nothing");
             }
 
-            dbg!(best_next_action);
+            //dbg!(best_next_action);
             
             if game.crew.gold == 0 {
                 best_next_action = (99,0,0);    
@@ -108,13 +112,15 @@ impl Brain {
                 num_actions += 1;
             }
 
-            println!("=================================================\n{}", game.crew);
+            //println!("=================================================\n{}", game.crew);
+            //println!("=================================================");
             
 
             let reward = game.reward() as f64 / game.crew.turn as f64;
-            println!("{}", reward);
+            //println!("{}", reward);
 
-            if reward > max_reward {max_reward = reward}
+            //if reward > max_reward {max_reward = reward}
+            max_reward = reward;
 
             let td_target = reward + discount_factor * max;
             let td_delta = td_target - *actual_q;
@@ -125,6 +131,7 @@ impl Brain {
                 break;
             }
         }
+        max_reward
     }
 
     pub fn get_best_actions(&mut self, game: &mut crate::game::Game) -> ((u8, u8, u8), f64) {

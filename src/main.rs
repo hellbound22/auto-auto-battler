@@ -10,30 +10,44 @@ mod qlearning;
 use game::Game;
 use qlearning::Brain;
 
+use crossterm::{
+    ExecutableCommand, execute, Result,
+    cursor::{DisableBlinking, EnableBlinking, MoveUp, RestorePosition, SavePosition}
+};
+use std::io::{stdout, Write};
+
 
 fn main() {
+    //let mut cursor = cursor();
     
     //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
     let mut brain = Brain::new();
     let mut _last = ((0, 0, 0), 0.);
 
-    let range = 1;
+    let mut acc = 0.;
+
+    let range = 10000;
     for x in 0..range {
         let pct = x as f64 / range as f64 * 100.;
-        print!("Processing {}: {:.2}%\r", x, pct);
+        println!("Processing {}: {:.2}%", x, pct);
         let mut game = Game::new("std");
         
         //game.bot_random();
         //game.roll_shop(1);
 
-        brain.process(&mut game);
+        acc += brain.process(&mut game);
 
         //println!("{}", game);
-        _last = brain.get_best_actions(&mut game);
+        //_last = brain.get_best_actions(&mut game);
+
+        println!("Average game reward at the end {:.4}\r", acc / range as f64);
         
+        stdout()
+            .execute(MoveUp(2)).unwrap();
+
     }
 
-    //dbg!(last);
+    dbg!(acc / range as f64);
     
     /* 
     std::process::exit(0);
