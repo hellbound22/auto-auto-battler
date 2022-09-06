@@ -23,9 +23,13 @@ A Super Auto Pets simulation engine
   - [x] Turn 9 +1 pet slot   
 - [ ] Use current life implementation
 - [ ] AI!!!!!!!
-  - [ ] Q-learning (avalible at the q-learning branch)
+  - [ ] Q-learning (partial)
+    - [x] Basic
+    - [ ] Heuristics
 
 #### Notes
+This mf is very RAM hungry, optimizations incoming
+
 All Super Auto Pets data comes from the [SAP Wiki](https://superautopets.fandom.com/wiki/Super_Auto_Pets_Wiki)
 
 All credit for the game machanics presented here goes to the dev team at [Team Wood Games](https://teamwoodgames.com/)

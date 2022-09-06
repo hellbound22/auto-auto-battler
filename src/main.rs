@@ -18,9 +18,6 @@ use std::io::{stdout, Write};
 
 
 fn main() {
-    //let mut cursor = cursor();
-    
-    //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
     let mut brain = Brain::new();
     let mut _last = ((0, 0, 0), 0.);
 
@@ -46,18 +43,4 @@ fn main() {
             .execute(MoveUp(2)).unwrap();
 
     }
-
-    dbg!(acc / range as f64);
-    
-    /* 
-    std::process::exit(0);
-
-    
-    let mut bot = Game::new("std");
-
-    game.bot_random();
-    bot.bot_random();
-    
-    game.game_loop(bot.crew.clone());
-    */
 }
