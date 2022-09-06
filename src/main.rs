@@ -15,7 +15,7 @@ fn main() {
     
     //let states = qlearning::StateTable::new("./qtables/std/meta_state.table", "./qtables/std/state.table", game.get_buckets());
     let mut brain = Brain::new();
-    let mut last = ((0, 0, 0), 0.);
+    let mut _last = ((0, 0, 0), 0.);
 
     let range = 1;
     for x in 0..range {
@@ -29,11 +29,11 @@ fn main() {
         brain.process(&mut game);
 
         //println!("{}", game);
-        last = brain.get_best_actions(&mut game);
+        _last = brain.get_best_actions(&mut game);
         
     }
 
-    dbg!(last);
+    //dbg!(last);
     
     /* 
     std::process::exit(0);
