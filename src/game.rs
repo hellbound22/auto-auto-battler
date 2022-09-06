@@ -38,6 +38,8 @@ impl Game {
             food_bucket.push(Food::new(line));
         }
 
+        //dbg!(&pet_bucket);
+
         Game {
             crew: Crew::new(),
             store: Store::new(pet_bucket.clone(), food_bucket.clone()),
@@ -85,7 +87,9 @@ impl Game {
                 if tier < 6. {
                     tier += 1.;
                 }
-
+                if tier > 6. {
+                    tier = 6.;
+                }
                 self.store.tier_up_pet(tier);
             }
             Ok(_) => {}

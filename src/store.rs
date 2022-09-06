@@ -74,7 +74,7 @@ impl Store {
             new_pets.push(bucket
                 .choose(&mut rand::thread_rng())
                 .cloned()
-                .unwrap());
+                .unwrap()); // BUG
         }
         new_pets.iter().map(|x| x.into()).collect()
     }
