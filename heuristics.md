@@ -18,3 +18,5 @@
 
 ### Efficiency 
 - [ ] Rolling with money unspent is unwise (-q points)
+- [ ] Clear self.q_table of entries that don't meet the average
+- [ ] A complete action_map is generated for each state that is processed, since the brain dosent know what to do necessarily, we can just pick a random action from the action.table and include only that in the qtable, after that, pruning the table and keeping only the actions that are above average

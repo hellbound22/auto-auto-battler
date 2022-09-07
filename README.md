@@ -26,6 +26,8 @@ A Super Auto Pets simulation engine
   - [ ] Q-learning (partial)
     - [x] Basic
     - [ ] Heuristics
+    - [ ] Include turn, gold in the state
+    - [ ] Include lives, wins in the state (after the algorithim learns to go to battle)
 
 #### Notes
 This mf is very RAM hungry, optimizations incoming
