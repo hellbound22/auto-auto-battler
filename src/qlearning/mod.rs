@@ -1,4 +1,3 @@
-use core::num;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -7,20 +6,18 @@ use std::collections::HashMap;
 use rand::prelude::*;
 
 use crate::pet::BPet;
-use crate::pet::Pet;
-use crate::food::Food;
 
 
 // Curr_friends -> Shop_friends -> Action -> calculate 
 pub struct Brain {
-    pub q_table: HashMap<usize, HashMap<(u8, u8, u8), f64>>,
+    // Index of state_table, (q_table for a certain state (action, q_value), average q_value of a certain state)
+    pub q_table: HashMap<usize, (HashMap<(u8, u8, u8), f64>, f64)>,
     pub state_table: Vec<(Vec<Option<BPet>>, Vec<Option<BPet>>)>,
     pub action_map: Vec<(u8, u8, u8)>,
 }
 
 impl Brain {
     pub fn new() -> Self {
-
         let file = File::open("qtables/std/action.table").unwrap();
         let buf_reader = BufReader::new(file);
 
@@ -31,7 +28,6 @@ impl Brain {
             let s = line.split(',').collect::<Vec<&str>>();
 
             map.push((s[0].parse().unwrap(), s[1].parse().unwrap(), s[2].parse().unwrap()));
-
         }
 
         Self {
@@ -51,21 +47,22 @@ impl Brain {
             if pair == &(0,0,0) {
                 q = std::f64::MIN;
             }
-            map.insert(pair.clone(), q);
+            map.insert(pair.clone(), std::f64::MIN);
         }
 
         map
     }
 
     pub fn process(&mut self, game: &mut crate::game::Game) -> f64 {
-
+        // Plans for optimization
+        // Clear self.q_table of entries that don't meet the average
         let discount_factor = 1.0;
         let alpha = 0.6;
-        let epsilon = 0.1;
+        let _epsilon = 0.1;
 
         let actions = self.get_action_map_random();
   
-        let mut max_reward = 0.;
+        let mut max_reward;
 
         let mut num_actions = 0;
         let max_actions = 100;
@@ -81,26 +78,20 @@ impl Brain {
                 }
             };
             
-            let q = self.q_table.entry(index).or_insert(actions.clone());
+            let q = self.q_table.entry(index).or_insert((actions.clone(), 0.));
 
             let mut max = 0.;
             let mut best_next_action = (0,0,0);
-            //q.iter().for_each(|x| if x.1 > &max {max = *x.1; best_next_action = x.0.clone()});
-            for (i, x) in q.iter().enumerate() {
+            for (_i, x) in q.0.iter().enumerate() {
                 if x.1 > &max {max = *x.1; best_next_action = x.0.clone()}
-                //dbg!(x.1);
-                //dbg!(max);
             }
             
 
-            let actual_q = q.get_mut(&(0,0,0)).unwrap();
+            let actual_q = q.0.get_mut(&(0,0,0)).unwrap();
             if best_next_action == (0,0,0) {
                 let mut rng = rand::thread_rng();
                 best_next_action = *self.action_map.choose(&mut rng).unwrap();
-                //println!("Best next action was doing nothing");
             }
-
-            //dbg!(best_next_action);
             
             if game.crew.gold == 0 {
                 best_next_action = (99,0,0);    
@@ -112,14 +103,8 @@ impl Brain {
                 num_actions += 1;
             }
 
-            //println!("=================================================\n{}", game.crew);
-            //println!("=================================================");
-            
-
             let reward = game.reward() as f64 / game.crew.turn as f64;
-            //println!("{}", reward);
 
-            //if reward > max_reward {max_reward = reward}
             max_reward = reward;
 
             let td_target = reward + discount_factor * max;
@@ -132,27 +117,6 @@ impl Brain {
             }
         }
         max_reward
-    }
-
-    pub fn get_best_actions(&mut self, game: &mut crate::game::Game) -> ((u8, u8, u8), f64) {
-        let state = (game.get_state().to_owned(), game.get_shop().to_owned());
-
-        let index = match self.state_table.binary_search(&state) {
-            Ok(x) => { x },
-            Err(x) => {
-                self.state_table.push(state.clone());
-                x
-            }
-        };
-        let actions = self.get_action_map_random();
-        
-        let q = self.q_table.entry(index).or_insert(actions.clone());
-
-        let mut max = std::f64::MAX;
-        let mut best_next_action = (0,0,0);
-        q.iter().for_each(|x| if x.1 > &max {max = *x.1; best_next_action = x.0.clone()});
-
-        (best_next_action, max)
     }
 
 }

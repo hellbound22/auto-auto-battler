@@ -13,13 +13,6 @@ pub struct Food {
 
 }
 
-impl std::hash::Hash for Food {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
-    }
-}
-
-
 impl Food {
     pub fn new(line: &str) -> Self {
         let split = line.split(",");

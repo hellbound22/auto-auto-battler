@@ -35,12 +35,6 @@ pub struct BPet {
     // TODO: Implement food
 }
 
-impl std::hash::Hash for BPet {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.pet.id.hash(state);
-    }
-}
-
 
 impl BPet {
     pub fn switch_food(&mut self, food: Food) {
@@ -136,13 +130,6 @@ impl Pet {
         }
     }
 }
-
-impl std::hash::Hash for Pet {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
-    }
-}
-
 
 impl Default for Pet {
     fn default() -> Self {
