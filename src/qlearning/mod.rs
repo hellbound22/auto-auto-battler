@@ -43,9 +43,9 @@ impl Brain {
         let mut rng = rand::thread_rng();
 
         for pair in &self.action_map {
-            let mut q = rng.gen();
+            let mut _q = rng.gen();
             if pair == &(0,0,0) {
-                q = std::f64::MIN;
+                _q = std::f64::MIN;
             }
             map.insert(pair.clone(), std::f64::MIN);
         }

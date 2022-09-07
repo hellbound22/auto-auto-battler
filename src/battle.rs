@@ -1,12 +1,12 @@
 use crate::pet::{BPet};
 use crate::crew::Crew;
 
-pub fn headon_attack(my_attacker: &mut Option<BPet>, enemy_attacker: &mut Option<BPet>) {
+pub fn _headon_attack(my_attacker: &mut Option<BPet>, enemy_attacker: &mut Option<BPet>) {
     my_attacker.as_mut().unwrap().pet.health = my_attacker.as_ref().unwrap().pet.health
     - enemy_attacker.as_ref().unwrap().pet.power;
 }
 
-pub fn check_life(pet: &mut Option<BPet>) -> bool {
+pub fn _check_life(pet: &mut Option<BPet>) -> bool {
     if pet.as_ref().unwrap().pet.health <= 0 {
         *pet = None;
         return true
@@ -14,7 +14,7 @@ pub fn check_life(pet: &mut Option<BPet>) -> bool {
     false
 }
 
-pub fn check_win_condition(my_crew: &Crew, enemy_crew: &Crew) -> u8 {
+pub fn _check_win_condition(my_crew: &Crew, enemy_crew: &Crew) -> u8 {
     let mut my_alive = 0;
     let mut enemy_alive = 0;
     for pet in &my_crew.friends {

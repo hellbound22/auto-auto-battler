@@ -41,11 +41,11 @@ impl BPet {
         self.food = Some(food);
     }
 
-    pub fn new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
+    pub fn _new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
         let split = line.split(",");
         let vec = split.collect::<Vec<&str>>();
         BPet {
-            pet: Pet::new_from_state_table(line, ref_pet),
+            pet: Pet::_new_from_state_table(line, ref_pet),
             level: vec[3].parse().unwrap(),
             xp: vec[4].parse().unwrap(),
             food: None,
@@ -118,7 +118,7 @@ impl Pet {
         }
     }
 
-    pub fn new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
+    pub fn _new_from_state_table(line: &str, ref_pet: &Pet) -> Self {
         let split = line.split(",");
         let vec = split.collect::<Vec<&str>>();
         Pet {
