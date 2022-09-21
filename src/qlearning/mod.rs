@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 use rand::prelude::*;
 
-use crate::pet::BPet;
+use crate::actors::pet::BPet;
 
 
 // Curr_friends -> Shop_friends -> Action -> calculate 

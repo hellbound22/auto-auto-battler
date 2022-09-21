@@ -3,10 +3,10 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
 
-use crate::crew::Crew;
-use crate::food::Food;
-use crate::pet::{BPet, Pet};
-use crate::store::Store;
+use crate::actors::crew::Crew;
+use crate::actors::food::Food;
+use crate::actors::pet::{BPet, Pet};
+use crate::actors::store::Store;
 use crate::{battle::*, util};
 
 #[derive(Debug)]

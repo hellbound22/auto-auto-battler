@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::pet::BPet;
+use crate::actors::pet::BPet;
 
 #[derive(Clone, Debug)]
 pub struct Crew {

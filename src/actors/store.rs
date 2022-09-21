@@ -2,8 +2,8 @@ use std::fmt;
 
 use rand::seq::SliceRandom; 
 
-use crate::pet::{Pet, SPet};
-use crate::food::Food;
+use crate::actors::pet::{Pet, SPet};
+use crate::actors::food::Food;
 
 #[derive(Debug, Default)]
 pub struct Store {

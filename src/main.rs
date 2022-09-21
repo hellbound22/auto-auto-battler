@@ -1,10 +1,7 @@
-mod store;
-mod pet;
-mod crew;
+mod actors;
 mod game;
 mod battle;
 mod util;
-mod food;
 mod qlearning;
 
 use game::Game;

@@ -1,5 +1,5 @@
-use crate::pet::{BPet};
-use crate::crew::Crew;
+use crate::actors::pet::{BPet};
+use crate::actors::crew::Crew;
 
 pub fn _headon_attack(my_attacker: &mut Option<BPet>, enemy_attacker: &mut Option<BPet>) {
     my_attacker.as_mut().unwrap().pet.health = my_attacker.as_ref().unwrap().pet.health

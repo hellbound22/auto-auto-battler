@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::food::Food;
+use crate::actors::food::Food;
 
 #[derive(Clone, Debug, Default)]
 pub struct SPet {
