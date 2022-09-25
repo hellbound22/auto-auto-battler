@@ -103,6 +103,10 @@ impl Crew {
 
         Ok(())
     }
+
+    pub fn turn(&self) -> u8 {
+        self.turn
+    }
 }
 
 impl fmt::Display for Crew {

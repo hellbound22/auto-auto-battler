@@ -49,8 +49,8 @@ impl Brain {
         let qtable_collection = database.collection::<QTable>("qtable");
 
         // This drops both collections for debug purposes
-        state_collection.drop(None).unwrap();
-        qtable_collection.drop(None).unwrap();
+        //state_collection.drop(None).unwrap();
+        //qtable_collection.drop(None).unwrap();
 
         let file = File::open("qtables/std/action.table").unwrap();
         let buf_reader = BufReader::new(file);
@@ -96,10 +96,10 @@ impl Brain {
 
         let actions = self.get_action_map_random();
   
-        let mut max_reward;
+        //let mut max_reward;
 
         let mut num_actions = 0;
-        let max_actions = 100;
+        let max_actions = 20;
 
         loop {
             let state = (game.get_state().to_owned(), game.get_shop().to_owned());
@@ -174,9 +174,9 @@ impl Brain {
             }
 
             //println!("T Action");
-            let reward = game.reward() as f64 / game.crew.turn as f64;
+            let reward = game.reward() as f64 / num_actions as f64; // TODO: when battles become a thing, change this to / turns passed
 
-            max_reward = reward;
+            //max_reward = reward;
 
             let td_target = reward + discount_factor * max;
             let td_delta = td_target - *actual_q;
@@ -186,11 +186,11 @@ impl Brain {
             self.q_table.find_one_and_replace(doc!{"id" : index}, q_obj.clone(), None).unwrap();
             //println!("W q_table");
 
-            if num_actions == max_actions {
+            if (game.crew.turn() == 2) || (num_actions >= max_actions) {
                 break;
             }
         }
-        max_reward
+        game.reward() as f64
     }
 
 }
