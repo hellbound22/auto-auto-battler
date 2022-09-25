@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, Default, PartialEq, Eq, Ord, PartialOrd)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct Food {
     pub id: i8,
     pub tier: i8,

@@ -20,6 +20,7 @@ fn main() {
     let mut acc = 0.;
 
     let range = 10000;
+    //std::process::exit(0);
     for x in 0..range {
         let pct = x as f64 / range as f64 * 100.;
         println!("Processing {}: {:.2}%", x, pct);

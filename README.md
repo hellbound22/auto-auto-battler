@@ -4,8 +4,10 @@ A Super Auto Pets simulation engine
 
 #### Roadmap
 
-- [ ] Outsource Q-tables to a DB to spare our poor RAM
+- [x] Outsource Q-tables to a DB to spare our poor RAM
+  - [ ] Shit's slow as hell now, IMPROVE
 - [ ] Implement CLI args
+- [ ] Use async for training
 - [ ] Use current life implementation
 - [ ] Include turn, gold in the state
 - [ ] Reward based on Wins

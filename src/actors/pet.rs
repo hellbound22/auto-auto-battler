@@ -1,5 +1,7 @@
 use std::fmt;
 
+use serde::{Serialize, Deserialize};
+
 use crate::actors::food::Food;
 
 #[derive(Clone, Debug, Default)]
@@ -26,7 +28,7 @@ impl From<SPet> for BPet {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd)]
+#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct BPet {
     pub pet: Pet,
     pub level: u8,
@@ -96,7 +98,7 @@ impl From<SPet> for Pet {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd)]
+#[derive(Clone, Debug, PartialEq, Eq, Ord, PartialOrd, Serialize, Deserialize)]
 pub struct Pet {
     pub id: i8,
     pub tier: i8,
